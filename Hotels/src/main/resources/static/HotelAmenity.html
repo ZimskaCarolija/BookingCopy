@@ -8,8 +8,85 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
         <title>TODO supply a title</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="reset.css">
+     <link rel="stylesheet" type="text/css" href="glavni.css">
+     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+     <script src="PromenaSlike.js"> </script>
     </head>
-    <body>
-        <div>TODO write content</div>
+    <body onload="Ucitaj()">
+        <h1 class="GlavniNaslov">Hotel Amenities</h1>
+        <div class="kontejner kS">
+            <div>Amenity : <select id="amenityAll"></select></div>
+            <div><button class="Dugme" onclick="AddAmenity()">Add Amenity</button></div>
+         <br><br>
+         <div id="stavke" class="Images">
+          </div>
+        </div>
+       <footer>
+           <div>Hotels</div>
+           <div>Aleksa Velimirovic</div>
+           <div>Personal project made in Spring</div>
+       </footer>
+       <script>
+           
+            const params = new URLSearchParams(location.search);
+            if(!params.has("id"))
+            window.location.href="HotelManadzer.html";
+            const id = params.get("id");
+            function Ucitaj()
+           {
+                LoadAmenityImages();
+                $.post("http://localhost:8080/UzmiAMenitije",function(data){
+                let podatci = JSON.parse(data);
+                console.log(podatci);
+                let amenityAll = document.getElementById("amenityAll");
+                amenityAll.innerHTML = "";
+                podatci.forEach(podatak=>{
+                         amenityAll.innerHTML +=`<option value='${podatak.amenityId}'>${podatak.ime}</option>`;
+                });
+             }).fail(function(xhr, status, error) {
+                     alert(xhr.responseText);
+                });
+           }
+           function LoadAmenityImages()
+           {
+               $.post("http://localhost:8080/ReturnMAenityHotel_ID",{id:id},function (data){
+                   data = JSON.parse(data);
+                   let stavke = document.getElementById("stavke");
+                  
+                   stavke.innerHTML = "";
+                   data.forEach(el=>{
+                       let src = "data:image/jpeg;base64,"+el.slika;
+                       stavke.innerHTML+=`<div class="Slika SlikaPreko"><img src="${src}"  onclick = "Delete(${el.amenityId})"></br></br></div>`;
+                   });
+               }).fail(function(xhr, status, error) {
+                           alert(xhr.responseText);
+                });
+           }
+           function Delete(idAmenity)
+           {
+               
+               $.post("http://localhost:8080/DeleteHotelAmenity",{idHotel:id,idAmenity:idAmenity},function (data){
+                   
+                 LoadAmenityImages();
+                  alert(data);
+               }).fail(function(xhr, status, error) {
+                           alert(xhr.responseText);
+                });
+           }
+           function AddAmenity()
+           {
+               
+               let idA = document.getElementById("amenityAll").value;
+               $.post("http://localhost:8080/AddHotelAMenity",{idHotel:id,idAmenity:idA},function (data){
+                   alert(data);
+                   LoadAmenityImages()();
+               }).fail(function(xhr, status, error) {
+                           alert(xhr.responseText);
+                });
+               
+           }
+          
+       </script>
     </body>
 </html>

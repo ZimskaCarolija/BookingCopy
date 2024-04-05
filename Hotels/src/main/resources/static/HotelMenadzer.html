@@ -29,7 +29,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
              console.log(data);
              data.forEach(el=>{
                  let id= el.idHotel;
-                 stavke.innerHTML +=`<div class="stavka2"><div>${el.name}</div><div><a class="Dugme" href='HotelIzmeni.html?id=${id}'}>Change</a><a class="Dugme">Amenities</a><a class="Dugme">Rooms</a></div></div>`
+                 stavke.innerHTML +=`<div class="stavka2"><div>${el.name}</div><div><a class="Dugme" href='HotelIzmeni.html?id=${id}'}>Change</a><a class="Dugme" href='HotelAmenity.html?id=${id}'>Amenities</a><a class="Dugme">Rooms</a></div></div>`
              });
          });
        </script>

@@ -4,6 +4,7 @@ import Klase.Amenity;
 import Klase.Drzava;
 import Klase.Grad;
 import Klase.Hotel;
+import Klase.HotelImages;
 import Klase.Konekcija;
 import Klase.Korisnik;
 import Klase.KorisnikEmail;
@@ -492,10 +493,6 @@ public class HotelsApplication {
        }
       @PostMapping("/HotelId")
         public ResponseEntity<?> HotelId(HttpServletRequest request, @RequestParam("id") int id) {
-             if(!Sesije.ProveriOvlascenje(request,2))
-           {
-               return ResponseEntity.badRequest().body("0");
-           }
             try {
                 Hotel h = Hotel.VratiHotelId(id);
                 ObjectMapper mapper = new ObjectMapper();
@@ -739,4 +736,124 @@ public class HotelsApplication {
               return ResponseEntity.badRequest().body(ex.getMessage());
           }
        }
+       @PostMapping("/ReturnMAenityHotel_ID")
+      public ResponseEntity<?> ReturnMAenityHotel_ID(@RequestParam ("id") int idHotel )
+      {
+          try
+          {
+          ArrayList<Amenity> amenitiji = Amenity.returnByHotelId(idHotel);
+          ObjectMapper maper = new ObjectMapper();
+          String str  =  maper.writeValueAsString(amenitiji);
+          return ResponseEntity.ok(str);
+          }
+          catch(Exception ex)
+          {
+              return ResponseEntity.badRequest().body(ex.getMessage());
+          }
+          
+      }
+      @PostMapping("/AddHotelAMenity")
+      public ResponseEntity<?> AddHotelAMenity(HttpServletRequest request , @RequestParam ("idHotel") int idHotel , @RequestParam ("idAmenity") int idAmenity)
+      {
+          if(!Sesije.ProveriOvlascenje(request,2))
+           {
+               return ResponseEntity.badRequest().body("0");
+           }
+          try
+          {
+                Korisnik k  = (Korisnik)request.getSession().getAttribute("korisnik");
+             if(!RoomType.ProveraVlasnistaSobe(idHotel, k.getId()))
+             {
+                 return ResponseEntity.badRequest().body("You are not owner of hotel");
+             }
+             Connection con = Konekcija.VratiKonekciju();
+             PreparedStatement st = con.prepareStatement("insert into hotem_amenities(hotel_id,amenity_id) values(?,?)");
+              st.setInt(1, idHotel);
+              st.setInt(2, idAmenity);
+              int noOfAffectedRows = st.executeUpdate();
+              if(noOfAffectedRows<1)
+              throw new Exception("Error not affected");
+              return ResponseEntity.ok("Success!!");
+          }
+          catch(Exception ex)
+          {
+                return ResponseEntity.badRequest().body(ex.getMessage());
+          }
+      }
+      @PostMapping("/DeleteHotelAmenity")
+      public ResponseEntity<?> DeleteHotelAmenity(HttpServletRequest request,@RequestParam ("idHotel") int idHotel , @RequestParam ("idAmenity") int idAmenity)
+      {
+          if(!Sesije.ProveriOvlascenje(request,2))
+           {
+               return ResponseEntity.badRequest().body("0");
+           }
+          try
+          {
+                Korisnik k  = (Korisnik)request.getSession().getAttribute("korisnik");
+             if(!RoomType.ProveraVlasnistaSobe(idHotel, k.getId()))
+             {
+                 return ResponseEntity.badRequest().body("You are not owner of hotel");
+             }
+             Connection con = Konekcija.VratiKonekciju();
+             PreparedStatement st = con.prepareStatement("delete from hotem_amenities where hotel_id = ? and  amenity_id = ?");
+              st.setInt(1, idHotel);
+              st.setInt(2, idAmenity);
+              int noOfAffectedRows = st.executeUpdate();
+              if(noOfAffectedRows<1)
+              throw new Exception("Error not affected");
+              return ResponseEntity.ok("Success!!");
+          }
+          catch(Exception ex)
+          {
+                return ResponseEntity.badRequest().body(ex.getMessage());
+          }
+      }
+      @PostMapping("/ReturnHotelImages")
+      public ResponseEntity<?> ReturnHotelImages(@RequestParam ("idHotel") int idHotel)
+      {
+           try
+          {
+
+             ArrayList<HotelImages> hotels = HotelImages.returnHotelImagesByH_ID(idHotel);
+             ObjectMapper maper = new ObjectMapper();
+             String returnStr = maper.writeValueAsString(hotels);
+             
+             
+              return ResponseEntity.ok(returnStr);
+          }
+          catch(Exception ex)
+          {
+                return ResponseEntity.badRequest().body(ex.getMessage());
+          }
+      }
+      @PostMapping("/AddHotelImage")
+      public ResponseEntity<?> AddHotelImage(HttpServletRequest request,@RequestParam("hotelId") int idHotel,@RequestParam("image") String img)
+      {
+          if(!Sesije.ProveriOvlascenje(request,2))
+           {
+               return ResponseEntity.badRequest().body("0");
+           }
+          try
+          {
+                Korisnik k  = (Korisnik)request.getSession().getAttribute("korisnik");
+             if(!RoomType.ProveraVlasnistaSobe(idHotel, k.getId()))
+             {
+                 return ResponseEntity.badRequest().body("You are not owner of hotel");
+             }
+             Connection con  = Konekcija.VratiKonekciju();
+             PreparedStatement st = con.prepareStatement("insert into hotelimage(hotel_id,image) values(?,?)");
+             byte[] imgByte = Base64.getDecoder().decode(img);
+             st.setInt(1, idHotel);
+             st.setBytes(2, imgByte);
+             int noAffetedRows = st.executeUpdate();
+             if(noAffetedRows<1)
+                 throw new Exception("Error Affected rows");
+              return ResponseEntity.ok("success");
+          }
+          catch(Exception ex)
+          {
+              return ResponseEntity.badRequest().body(ex.getMessage());
+          }
+      }
+      
 }
