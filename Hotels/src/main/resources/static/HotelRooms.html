@@ -8,8 +8,68 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
         <title>TODO supply a title</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     
+     
+     <link rel="stylesheet" type="text/css" href="reset.css">
+     <link rel="stylesheet" type="text/css" href="glavni.css">
+     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+     <script src="PromenaSlike.js"> </script>
+     
     </head>
-    <body>
-        <div>TODO write content</div>
+    <body onload="Ucitaj()">
+        <h1 class="GlavniNaslov">Hotel Rooms</h1>
+         <div class="kontejner">
+             <div>Room Number : <input type="number" id="number" value="1"/></div>
+             <div>Room Name : <input type="text" id="name"/></div>
+             <div>Room Type: <select id="roomType"></select></div>
+             <div class="flexY">is showing : <input type="checkbox" id="ban"/></div>
+             <div><button onclick="Add()">Add</button></div>
+             <div class="stavke"></div>
+             
+            
+         </div>
+       <footer>
+           <div>Hotels</div>
+           <div>Aleksa Velimirovic</div>
+           <div>Personal project made in Spring</div>
+       </footer>
+        <script>
+            const searchParams = new URLSearchParams(window.location.search);
+            if(!searchParams.has('id'))
+                window.location.href='HotelMenadzer.html';
+            let id= searchParams.get('id');
+             function Ucitaj()
+            {
+                    alert(id);
+                   $.post("http://localhost:8080/RoomTypesHotel",{HotelID:id}, function(data) {
+                       data = JSON.parse(data);
+                       console.log(data);
+                       let roomType = document.getElementById("roomType");
+                       roomType.innerHTML = "";
+                       data.forEach(el =>{
+                           roomType.innerHTML += 
+                            `<option value='${el.room.room_type_id}'>${el.room.room_type_name}</option>`;
+                           
+                       });
+                   }).fail(function(xhr, status, error) {
+                           alert(xhr.responseText);
+                });
+           }
+            function Add()
+            {
+                let noRoom  = document.getElementById("number").value;
+                let name  = document.getElementById("name").value;
+                let roomType  = document.getElementById("roomType").value;
+                let ban  = document.getElementById("ban").checked;
+                $.post("http://localhost:8080/AddRoom",{room_number:noRoom,room_name:name,room_type_id:roomType,ban:ban},function(data){
+                    alert(data);
+                }).fail(function(xhr,status,error){
+                    alert(xhr.responseText);
+                    if(xhr.responseText == '0')
+                        window.location.href="Login.html";
+                });
+            }
+
+        </script>
     </body>
 </html>

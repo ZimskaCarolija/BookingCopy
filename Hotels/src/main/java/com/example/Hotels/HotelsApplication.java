@@ -855,5 +855,102 @@ public class HotelsApplication {
               return ResponseEntity.badRequest().body(ex.getMessage());
           }
       }
+      @PostMapping("/DeleteHotelImage")
+      public ResponseEntity<?> AddHotelImage(HttpServletRequest request,@RequestParam("hotelId") int idHotel,@RequestParam("ImagehotelId") int idHotelImage)
+      {
+           if(!Sesije.ProveriOvlascenje(request,2))
+           {
+               return ResponseEntity.badRequest().body("0");
+           }
+          try
+          {
+                Korisnik k  = (Korisnik)request.getSession().getAttribute("korisnik");
+             if(!RoomType.ProveraVlasnistaSobe(idHotel, k.getId()))
+             {
+                 return ResponseEntity.badRequest().body("You are not owner of hotel");
+             }
+             Connection con = Konekcija.VratiKonekciju();
+             PreparedStatement st = con.prepareStatement("delete from hotelimage where hotel_img_id = ?");
+             st.setInt(1, idHotelImage);
+             int noAffetedRows = st.executeUpdate();
+             if(noAffetedRows<1)
+                 throw new Exception("Error Affected rows");
+              return ResponseEntity.ok("success");
+          }
+          catch(Exception ex)
+          {
+              return ResponseEntity.badRequest().body(ex.getMessage());
+          }
+      }
+      @PostMapping("/AddRoom")
+      public ResponseEntity<?> AddRoom(HttpServletRequest request,@RequestParam("room_number") int room_number,
+       @RequestParam("room_name") String room_name,@RequestParam("room_type_id") int room_type_id,@RequestParam("ban") boolean Showing)
+      {
+          if(!Sesije.ProveriOvlascenje(request,2))
+           {
+               return ResponseEntity.badRequest().body("0");
+           }
+                       Korisnik k = (Korisnik)request.getSession().getAttribute("korisnik");
+          
+           try
+           {
+                if(!RoomType.ProveraSobaUser(k.getId(), room_type_id))
+                {
+                return ResponseEntity.badRequest().body("You are not owner of room");
+                }
+                Connection con = Konekcija.VratiKonekciju();
+                PreparedStatement st = con.prepareStatement("insert into room(room_number,room_name,room_type_id,banovan) values(?,?,?,?)");
+                st.setInt(1, room_number);
+                st.setString(2, room_name);
+                st.setInt(3, room_type_id);
+                st.setBoolean(4, Showing);
+                int noAffected = st.executeUpdate();
+                return ResponseEntity.ok("success");
+           }
+           catch(Exception ex)
+           {
+               return ResponseEntity.badRequest().body(ex.getMessage());
+           }
+      }
+       @PostMapping("/RoomTypesHotel")
+        public ResponseEntity<?> MyRoomTypes(HttpServletRequest request,@RequestParam("HotelID") int hotelID)
+        {
+             if(!Sesije.ProveriOvlascenje(request,2))
+           {
+               return ResponseEntity.badRequest().body("0");
+           }
+            try
+            {
+                ArrayList<RoomTypeHotel> hoteliSobe = new ArrayList<>(); 
+                Korisnik k  = (Korisnik)request.getSession().getAttribute("korisnik");
+                Connection con = Konekcija.VratiKonekciju();
+                PreparedStatement st = con.prepareStatement("select room_type_id,no_beds,room_type_name,desribe,r.hotel_id,r.banovan,hotel_name from room_type r , hotel h where r.hotel_id  = h.hotel_id and  userId = ? and h.hotel_id = ?");
+                st.setInt(1, k.getId());
+                st.setInt(2, hotelID);
+                ResultSet rs = st.executeQuery();
+                
+                while(rs.next())
+                {
+                    int no_beds = rs.getInt("no_beds");
+                    int room_type_id = rs.getInt("room_type_id");
+                    String room_type_name = rs.getString("room_type_name");
+                    int hotel_id  = rs.getInt("hotel_id");
+                    boolean banovan = rs.getBoolean("banovan");
+                    String desribe = rs.getString("desribe");
+                    String hotel_name = rs.getString("hotel_name");
+                    RoomType room = new RoomType(room_type_id,no_beds,room_type_name,desribe,hotel_id,banovan);
+                    RoomTypeHotel rh = new RoomTypeHotel(room,hotel_name);
+                    hoteliSobe.add(rh);
+                }
+                con.close();
+                ObjectMapper maper = new ObjectMapper();
+                String str = maper.writeValueAsString(hoteliSobe);
+                return ResponseEntity.ok(str);
+            }
+            catch(Exception ex)
+            {
+                return ResponseEntity.badRequest().body("Error : " + ex.getMessage());
+            }
+        }
       
 }

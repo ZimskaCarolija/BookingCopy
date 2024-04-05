@@ -196,6 +196,23 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                       LoadImages();
                   }).fail(function(xhr, status, error) {
                            alert(xhr.responseText);
+                           if(xhr.responseText == '0')
+                               window.location.href='Login.html';
+                });
+            }
+            function Delete(iDImage)
+            {
+                if(id<0)
+                    return;
+                 let image = document.getElementById("slika2").src.split(';base64,').pop();
+                  $.post("http://localhost:8080/DeleteHotelImage",{hotelId:id,ImagehotelId:iDImage},function (data){
+                         
+                      alert(data);
+                      LoadImages();
+                  }).fail(function(xhr, status, error) {
+                           alert(xhr.responseText);
+                           if(xhr.responseText == '0')
+                               window.location.href='Login.html';
                 });
             }
         </script>
