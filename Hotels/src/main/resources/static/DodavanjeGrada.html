@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link rel="stylesheet" type="text/css" href="reset.css">
+     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+ <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue" rel="stylesheet">
+         <link rel="stylesheet" type="text/css" href="glavni.css">
+            <script src="PromenaSlike.js"></script>
+    </head>
+    <body onload="Uzmi()">
+         <div class="topnav" id="myTopnav">
+          <a class="active">Admin Dashboard</a>
+          
+          <a href="DodavanjeDrzave.html">Add Country</a>
+          <a href="SveDrzave.html">All Countries</a>
+      
+          <a href="DodavanjeAmenitija.html">Add Amenity</a>
+          <a href="SviAmenitiji.html">All Amenities</a>
+          
+          <a href="DodavanjeGrada.html">Add City</a>
+          <a href="SviGradovi.html">All Cities</a>
+          
+          <a href="SviKorisnici.html">All Users</a>
+          
+          <a href="javascript:void(0);" class="icon" onclick="Meni()">
+            <i class="fa fa-bars"></i>
+          </a>
+        </div>
+        <h1 class="GlavniNaslov">Add City</h1>
+        <div class="kontejner">
+             <div >Naziv : <input type="text" id="naziv"></div>
+                     <div id="tip">Account type : <select id="drzava">
+                 </select></div>
+             <div><button onclick="Dodaj()">Add</button></div>
+         </div>
+        <script>
+           window.onload = () =>
+            {
+               const dr =  document.getElementById("drzava");
+               dr.innerHTML = "";
+                $.ajax({
+                    url:"http://localhost:8080/SveDrzave",
+                    type:"POST",
+                    success:function(data)
+                    {
+                        data = JSON.parse(data);
+                        console.log(data);
+                        data.forEach(element=>{
+                         dr.innerHTML+=`<option value=${element.id}>${element.naziv}</option>`;
+                         
+                         });
+                    },
+                     error: function(xhr, status, error) {
+                    console.log("Error", xhr.responseText);
+                    alert("Error " + xhr.responseText);
+                    }
+                });
+            }
+            function Dodaj()
+            {
+                const naziv = document.getElementById("naziv").value;
+                const drzava = document.getElementById("drzava").value;
+                if(naziv.trim().length<1)
+                {
+                    alert("Name cant be empty");
+                    return;
+                }
+                $.ajax({
+                    url:"http://localhost:8080/DodajGrad",
+                    type:"POST",
+                    data:{id:drzava,naziv:naziv},
+                    success:function(data)
+                    {
+                       alert("success");
+                    },
+                     error: function(xhr, status, error) {
+                         if(xhr.responseText == "0")
+                             window.location.href="Login.html";
+                    console.log("Error", xhr.responseText);
+                    alert("Error " + xhr.responseText);
+                    }
+                });
+            }
+        </script>
+    </body>
+</html>

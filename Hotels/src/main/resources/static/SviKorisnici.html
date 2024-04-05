@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     
+     <link rel="stylesheet" type="text/css" href="glavni.css">
+     <link rel="stylesheet" type="text/css" href="reset.css">
+     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+     <script src="SviKorisnici.js"></script>
+     <script src="PromenaSlike.js"></script>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+ <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue" rel="stylesheet">
+         <link rel="stylesheet" type="text/css" href="glavni.css">
+    </head>
+    <body>
+         <div class="topnav" id="myTopnav">
+          <a class="active">Admin Dashboard</a>
+          
+          <a href="DodavanjeDrzave.html">Add Country</a>
+          <a href="SveDrzave.html">All Countries</a>
+      
+          <a href="DodavanjeAmenitija.html">Add Amenity</a>
+          <a href="SviAmenitiji.html">All Amenities</a>
+          
+          <a href="DodavanjeGrada.html">Add City</a>
+          <a href="SviGradovi.html">All Cities</a>
+          
+          <a href="SviKorisnici.html">All Users</a>
+          
+          <a href="javascript:void(0);" class="icon" onclick="Meni()">
+            <i class="fa fa-bars"></i>
+          </a>
+        </div>
+        <h1 class="GlavniNaslov">Users</h1>
+        <div class="kontejner kS">
+            <div class="stavka"><div class="Email">E-mail : <br><input type="text" id="pretraga"></div><button onclick="Pretraga()">Search</button></div>
+            <div id="stavke">
+           <div class="stavka"><div class="Email">aki.velimirovic@gmail.com</div><button>View</button></div>
+          <div class="stavka"><div class="Email">aki.velimirovic@gmail.com</div><button>View</button></div>
+           <div class="stavka"><div class="Email">aki.velimirovic@gmail.com</div><button>View</button></div>
+           </div>
+        </div>
+       <footer>
+           <div>Hotels</div>
+           <div>Aleksa Velimirovic</div>
+           <div>Personal project made in Spring</div>
+       </footer>
+    </body>
+</html>

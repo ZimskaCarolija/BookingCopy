@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     
+     
+     <link rel="stylesheet" type="text/css" href="reset.css">
+     <link rel="stylesheet" type="text/css" href="glavni.css">
+     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+     <script src="PromenaSlike.js"> </script>
+     
+    </head>
+    <body onload="Ucitaj()">
+        <h1 class="GlavniNaslov">Add Hotel</h1>
+         <div class="kontejner">
+           
+          
+             <div>Hotel name <input type="text" id="hotel"></div>
+             <div> City : <select id="city"></select></div>
+             <div>Address : <input type="text" id="address"> </div>
+             <div>Description : <textarea id="opis"> </textarea></div>
+             <div>Stars : <select id="stars">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                 </select></div>
+             <div class="Slika"><img src="" id="slika"></br></br></div>
+             <label class="custom-file-upload"> <input type="file" id="slikaOdabir" onchange="PromenaSlike()"/>  Upload png</label>
+             </br></br>
+             
+             <button onclick="Sacuvaj()">Add Hotel</button>
+         </div>
+       <footer>
+           <div>Hotels</div>
+           <div>Aleksa Velimirovic</div>
+           <div>Personal project made in Spring</div>
+       </footer>
+        <script>
+            function Ucitaj()
+            {
+                $.post("http://localhost:8080/SviGradovi",function(data){
+                        data = JSON.parse(data);
+                        let gradovi = document.getElementById("city");
+                        gradovi.innerHTMl = "";
+                       data.forEach(el => {
+                if (el.prikazuje_se) {
+                gradovi.innerHTML += `<option value="${el.gradId}">${el.gradNaziv}</option>`;
+            }
+            });
+                    
+                });
+              
+            }
+            function Sacuvaj()
+            {
+                let name = document.getElementById("hotel").value;
+                let city = document.getElementById("city").value;
+                let address = document.getElementById("address").value;
+                let opis = document.getElementById("opis").value;
+                let slika = document.getElementById("slikaOdabir");
+                let zvezde = document.getElementById("stars").value;
+                console.log(name + " " + city+" "+address+ " "+opis+" "+zvezde);
+                if (slika.files.length > 0 && name.length>0 && address.length>0)
+                {
+                    let file = slika.files[0];
+                    let formData = new FormData();
+                    formData.append('name',name);
+                    formData.append('cityId',city);
+                    formData.append('address',address);
+                    formData.append('stars',zvezde);
+                    formData.append('image',file);
+                    formData.append('desc',opis);
+                    $.ajax({
+                        url:"http://localhost:8080/DodajHotel",
+                        type:"POST",
+                        data:formData,
+                        contentType: false, 
+                        processData: false,
+                        success: function(data2) {
+                            alert(data2);
+                        },
+                        error: function(xhr, status, error) {
+                            console.error("Error " + error);
+                            alert("Error."+xhr);
+                        }
+                    });
+                    
+                }
+                else
+                {
+                    alert("please fill al inputs");
+                }
+            }
+        </script>
+    </body>
+</html>

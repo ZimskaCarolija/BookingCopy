@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     
+     
+     <link rel="stylesheet" type="text/css" href="reset.css">
+     <link rel="stylesheet" type="text/css" href="glavni.css">
+     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+     <script src="PromenaSlike.js"> </script>
+     
+    </head>
+    <body onload="Ucitaj()">
+        <h1 class="GlavniNaslov">Change Hotel</h1>
+         <div class="kontejner">
+           
+          
+             <div>Hotel name <input type="text" id="hotel"></div>
+             <div> City : <select id="city"></select></div>
+             <div>Address : <input type="text" id="address"> </div>
+             <div>Description : <textarea id="opis"> </textarea></div>
+             <div>Stars : <select id="stars">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                 </select></div>
+             <div class="flexY">is showing : <input type="checkbox" id="ban"/></div>
+             <div class="Slika"><img src="" id="slika"></br></br></div>
+             <label class="custom-file-upload"> <input type="file" id="slikaOdabir" onchange="PromenaSlike()"/>  Upload png</label>
+             </br></br>
+             
+             <button onclick="Sacuvaj()">Edit Hotel</button>
+         </div>
+       <footer>
+           <div>Hotels</div>
+           <div>Aleksa Velimirovic</div>
+           <div>Personal project made in Spring</div>
+       </footer>
+        <script>
+            let id = -1;
+           
+            function Ucitaj()
+            {
+            
+                 const searchParams = new URLSearchParams(window.location.search);
+               if(searchParams.has('id'))
+               {     id= searchParams.get('id');
+                   $.post("http://localhost:8080/HotelId",{id:id},function(data){
+                       data = JSON.parse(data);
+                       console.log(data);
+                       document.getElementById("address").value = data.address;
+                       document.getElementById("opis").value = data.desc;
+                       document.getElementById("hotel").value = data.name;
+                       document.getElementById("slika").src = "data:image/png;base64,"+data.hotel_img;
+                       document.getElementById("ban").checked = data.isShowin;
+                       let selectElement = document.getElementById("stars");
+                        for (var i = 0; i < selectElement.options.length; i++) {
+                            
+                            if (selectElement.options[i].value == data.starts) {
+                               
+                              selectElement.selectedIndex = i;
+                              break;
+                            }
+                        }
+                        $.post("http://localhost:8080/SviGradovi", function(da) {
+                                da = JSON.parse(da);
+                                let gradovi = document.getElementById("city");
+                                gradovi.innerHTML = ""; // Resetujemo HTML pre dodavanja novih opcija
+                                
+                                da.forEach(el => {
+                                    let prikaz = "";
+                                    if (el.gradId === data.city_id) { 
+                                        
+                                        prikaz = 'selected'; 
+                                    }
+                                    if (el.prikazuje_se) {
+                                        gradovi.innerHTML += `<option value="${el.gradId}" ${prikaz}>${el.gradNaziv}</option>`;
+                                    }
+                                });
+                    });
+                       
+                       
+                       
+                       
+                       
+                       
+                   });
+               }
+               else
+               {
+                   window.location.href="HotelMenadzer.html";
+               }
+                
+            }
+            function Sacuvaj()
+            {
+                let name = document.getElementById("hotel").value;
+                let city = document.getElementById("city").value;
+                let address = document.getElementById("address").value;
+                let opis = document.getElementById("opis").value;
+                let slika = document.getElementById("slika").src;
+                let zvezde = document.getElementById("stars").value;
+                let showing = document.getElementById("ban").checked
+                   const mimeType = 'image/png';
+                const filename = 'slika.png';
+                 const fajl = base64ToFile(slika, filename, mimeType);
+                    let formData = new FormData();
+                    formData.append('name',name);
+                    formData.append('cityId',city);
+                    formData.append('address',address);
+                    formData.append('stars',zvezde);
+                    formData.append('image',fajl);
+                    formData.append('desc',opis);
+                    formData.append('id',id);
+                    formData.append('showing',showing);
+                    $.ajax({
+                        url:"http://localhost:8080/IzmeniHotel",
+                        type:"POST",
+                        data:formData,
+                        contentType: false, 
+                        processData: false,
+                        success: function(data2) {
+                            alert(data2);
+                        },
+                        error: function(xhr, status, error) {
+                            console.error("Error " + xhr.responseText);
+                            alert("Error."+xhr);
+                        }
+                    });
+            }
+            function base64ToFile(base64String, filename, mimeType) {
+                const base64Data = base64String.split(';base64,').pop();
+                const binaryData = atob(base64Data);
+                const arrayBuffer = new ArrayBuffer(binaryData.length);
+                const view = new Uint8Array(arrayBuffer);
+                for (let i = 0; i < binaryData.length; i++) {
+                    view[i] = binaryData.charCodeAt(i);
+                }
+                const blob = new Blob([arrayBuffer], { type: mimeType });
+                const file = new File([blob], filename, { type: mimeType });
+
+                return file;
+            }
+        </script>
+    </body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <link rel="stylesheet" type="text/css" href="reset.css">
+     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+ <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue" rel="stylesheet">
+         <link rel="stylesheet" type="text/css" href="glavni.css">
+         <script src="PromenaSlike.js"></script>>
+     
+    </head>
+    <div class="topnav" id="myTopnav">
+          <a class="active">Admin Dashboard</a>
+          
+          <a href="DodavanjeDrzave.html">Add Country</a>
+          <a href="SveDrzave.html">All Countries</a>
+      
+          <a href="DodavanjeAmenitija.html">Add Amenity</a>
+          <a href="SviAmenitiji.html">All Amenities</a>
+          
+          <a href="DodavanjeGrada.html">Add City</a>
+          <a href="SviGradovi.html">All Cities</a>
+          
+          <a href="SviKorisnici.html">All Users</a>
+          
+          <a href="javascript:void(0);" class="icon" onclick="Meni()">
+            <i class="fa fa-bars"></i>
+          </a>
+        </div>
+    <body onload="Uzmi()">
+        <h1 class="GlavniNaslov">User Update</h1>
+        <div class="kontejner">
+             <div id="mail">E - mail : primer@primer.com</div>
+                     <div id="tip">Account type : <select id="odabir">
+                      <option value="1">User</option>
+                      <option value="2">Manager</option>
+                      <option value="3">Admin</option>
+                 </select></div>
+             <div><button onclick="Sacuvaj()">Save</button></div>
+         </div>
+        <script>
+            const params = new URLSearchParams(location.search);
+        if(!params.has("id"))
+            window.location.href="SviKorisnici.html";
+        const id = params.get("id");
+        function Uzmi()
+        {
+        $.ajax({
+            url:"http://localhost:8080/UzmiKorisnikID",
+            type:"POST",
+            data:{id:id},
+            success:function(result)
+            {
+                result = JSON.parse(result);
+                document.getElementById("mail").innerHTML = "E - mail : "+result.email;
+                document.getElementById("odabir").selectedIndex = result.id_accType-1;
+            },
+            error: function(xhr, status, error) {
+            console.log( status + " Greška: " + error);
+            alert(xhr.responseText);
+             }
+       
+            
+        });
+    }
+        function Sacuvaj()
+        {
+            let tip = document.getElementById("odabir").value;
+            console.log("type is "+tip);
+            $.ajax({
+                
+                url:"http://localhost:8080/IZmeniKOrisnika",
+                type:"POST",
+                data:{id:id,tip:tip},
+                success:function(result)
+                {
+                    Uzmi();
+                },
+                error: function(xhr, status, error) {
+                console.log( status + " Greška: " + error);
+               if(xhr.responseText == "0")
+                             window.location.href="Login.html";
+                alert("Error");
+                }
+                
+            });
+        }
+        </script>
+    </body>
+</html>

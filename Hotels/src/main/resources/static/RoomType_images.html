@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="reset.css">
+     <link rel="stylesheet" type="text/css" href="glavni.css">
+     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+     <script src="PromenaSlike.js"> </script>
+    </head>
+    <body onload="Ucitaj()">
+        <h1 class="GlavniNaslov">Room Types Image</h1>
+        <div class="kontejner kS">
+          
+         <div class="Slika"><img src="" id="slika"></br></br></div>
+         <div><label class="custom-file-upload"> <input type="file" id="slikaOdabir" onchange="PromenaSlike()"/>  Choose img</label></div>
+         <div><button class="Dugme" onclick ="Add()">Add</button></div>
+         <br><br>
+         <div id="stavke" class="Images">
+          </div>
+        </div>
+       <footer>
+           <div>Hotels</div>
+           <div>Aleksa Velimirovic</div>
+           <div>Personal project made in Spring</div>
+       </footer>
+       <script>
+           
+            const params = new URLSearchParams(location.search);
+            if(!params.has("id"))
+            window.location.href="RoomTypeAll.html";
+            const id = params.get("id");
+            function Ucitaj()
+           {
+               $.post("http://localhost:8080/RoomImages",{roomId:id},function (data){
+                   data = JSON.parse(data);
+                   let stavke = document.getElementById("stavke");
+                   stavke.innerHTML = "";
+                   data.forEach(el=>{
+                       let src = "data:image/jpeg;base64,"+el.image;
+                       stavke.innerHTML+=`<div class="Slika SlikaPreko"><img src="${src}"  onclick = "Delete(${el.room_img_id})"></br></br></div>`;
+                   });
+               }).fail(function(xhr, status, error) {
+                           alert(xhr.responseText);
+                });
+           }
+           function Delete(idImg)
+           {
+               $.post("http://localhost:8080/DeleteRoomImage",{imageID:idImg},function (data){
+                    alert(data);
+                 Ucitaj();
+               }).fail(function(xhr, status, error) {
+                           alert(xhr.responseText);
+                });
+           }
+           function Add()
+           {
+               console.log(document.getElementById("slika").src);
+               let image = document.getElementById("slika").src.split(';base64,').pop();
+               
+               $.post("http://localhost:8080/DodajRoomTypeIMG",{roomId:id,img:image},function (data){
+                   alert(data);
+                   Ucitaj();
+               }).fail(function(xhr, status, error) {
+                           alert(xhr.responseText);
+                });
+               
+           }
+          
+       </script>
+    </body>
+</html>

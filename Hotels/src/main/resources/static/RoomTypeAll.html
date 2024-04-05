@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="reset.css">
+     <link rel="stylesheet" type="text/css" href="glavni.css">
+     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+     <script src="PromenaSlike.js"> </script>
+    </head>
+    <body onload="Ucitaj()">
+        <h1 class="GlavniNaslov">All Room Types</h1>
+        <div class="kontejner kS">
+            <div id="stavke">
+           <div class="stavka"><div class="Email">aki.velimirovic@gmail.com</div><button>View</button></div>
+          <div class="stavka"><div class="Email">aki.velimirovic@gmail.com</div><button>View</button></div>
+           <div class="stavka"><div class="Email">aki.velimirovic@gmail.com</div><button>View</button></div>
+           </div>
+        </div>
+       <footer>
+           <div>Hotels</div>
+           <div>Aleksa Velimirovic</div>
+           <div>Personal project made in Spring</div>
+       </footer>
+        <script>
+            function Ucitaj()
+            {
+
+                   $.post("http://localhost:8080/MyRoomTypes", function(data) {
+                       data = JSON.parse(data);
+                       console.log(data);
+                       let stavke = document.getElementById("stavke");
+                       stavke.innerHTML = "";
+                       data.forEach(el =>{
+                           stavke.innerHTML += `<div class='stavka2'>
+                            <div>${el.room.room_type_name}</div>
+                            <div>${el.hotelName}</div>
+                            <div>
+                            <a class='Dugme' href='IzmeniRoomType.html?id=${el.room.room_type_id}'>Edit</a>
+                            <a class='Dugme' href='RoomType_images.html?id=${el.room.room_type_id}'>Images</a></div>
+                            </div>`;
+                           
+                       });
+                   }).fail(function(xhr, status, error) {
+                           alert(xhr.responseText);
+                });
+           }
+        </script>
+    </body>
+</html>

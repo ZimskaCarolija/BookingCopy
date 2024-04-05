@@ -1,0 +1,311 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : Feb 16, 2024, 5:22:32 PM
+    Author     : Aleksa
+*/
+button,.Dugme
+{
+      border:2px solid black;
+    box-shadow: 4px 4px 1px black;
+    padding:5px 15px;
+    background-color: #ffd6ba;
+    color:black;
+}
+button:hover , Dugme:hover
+{
+    
+     background-color: #89b0ae;
+}
+.GlavniNaslov
+{
+    text-align: center;
+    font-size: 48px;
+}
+
+a
+{
+    color:#faf9f9;
+    
+}
+
+.kontejner
+{
+    background-color: #555b6e;
+    color:#faf9f9;
+    text-align: left;
+    padding: 50px 0px;
+    margin:5%;
+      border:2px solid black;
+    box-shadow: 7px 7px 1px black;
+    font-size:1.4em;
+}
+.kontejner div
+{
+    margin: 20px auto;
+    text-align: left;
+    width:90%;
+    max-width: 95%px;
+  
+}
+.kontejner div input
+{
+    margin-right:15px;
+}
+
+.Slika img
+{
+    text-align: left;
+    border: 5px solid black;
+    box-shadow: 10px 10px 1px black;
+    background-color: white;
+}
+
+
+footer
+{
+    background-color: #ffd6ba;
+    margin: 0;
+    padding: 0;
+    
+    box-sizing: border-box;
+    margin-top: auto;
+    margin-bottom: 0;
+}
+footer div
+{
+    margin:20px 30px;
+    color:#555b6e;
+    text-decoration: underline;
+    padding:20px;
+}
+input
+{
+    background-color: white;
+    color:black;
+}
+.Telo
+{
+     min-height: 100vh;
+}
+img
+{
+    max-width: 150px;
+    max-height: 150px;
+    width:150px;
+    height: 150px;
+}
+label
+{
+border:2px solid black;
+box-shadow: 7px 7px 1px black;
+padding:10px 30px;
+background-color: #ffd6ba;
+font-size: 0.7em;
+color:black;
+margin-top:30px;
+}
+input[type="file"] {
+display: none;
+
+}
+.kS
+{
+padding:5px;
+}
+
+.stavka,  .stavka2
+{
+background-color: #89b0ae;
+padding:5px;
+border:5px soldi black;
+box-shadow: 10px 10px 1px black;
+display: flex;
+flex-direction: row;
+color:#555b6e;
+}
+.karte
+{
+    background-color: #555b6e;
+    color:#faf9f9;
+    text-align: left;
+    padding: 50px 0px;
+    margin:5%;
+     border:2px solid black;
+    box-shadow: 7px 7px 1px black;
+    font-size:1.1em;
+    display:flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.karta
+{
+    display: inline;
+    background-color: #bee3db;
+    padding:20px;
+    text-align: center;
+    margin:50px;
+    color:black;
+    box-shadow: 7px 7px 5px black;
+    border:3px solid black;
+}
+.karta a
+{
+    color:#555b6e;
+    font-weight: 200;
+    text-decoration: none;
+}
+
+.karta img
+{
+    width :150px;
+    height:150px;
+}
+input[type="checkbox"]
+{
+    min-width:30px;
+    min-height:30px;
+    padding:10px;
+    color:black;
+}
+.flexY  ///po y ls9 je poravnat
+{
+  display: flex;
+    align-items: center; /* Vertikalno centriranje */
+    flex-wrap: nowrap;
+    color:black;
+}
+
+.flexY input[type="checkbox"] {
+    vertical-align: middle;
+}
+input
+{
+    border:0px solid black;
+    box-shadow: 7px 7px 0px black;
+}
+.custom-file-upload
+{
+    padding:10px;
+}
+input[type="text"]
+{
+    padding:5px 0px;
+}
+select
+{
+    padding:5px;
+    box-shadow: 3px 3px 1px black;
+}
+
+.topnav {
+  background-color: #bee3db;
+  overflow: hidden;
+  margin-bottom:50px;
+  border-bottom:5px solid black;
+}
+
+/* Style the links inside the navigation bar */
+.topnav a {
+  float: left;
+  display: block;
+  color: #555b6e;
+  text-align: center;
+  padding: 22px 16px;
+  text-decoration: none;
+  font-size: 17px;
+  
+}
+
+
+.topnav a:hover {
+  background-color: #ffd6ba;
+  color: black;
+}
+.topnav a.active {
+  background-color: #89b0ae;
+}
+.topnav .icon {
+  display: none;
+}
+
+
+@media screen and (max-width: 830px) {
+  .topnav a:not(:first-child) {display: none;}
+  .topnav a.icon {
+    float: right;
+    display: block;
+  }
+}
+@media screen and (max-width: 830px) {
+  .topnav.responsive {position: relative;}
+  .topnav.responsive a.icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .topnav.responsive a {
+    float: none;
+    display: block;
+    text-align: left;
+  }
+  .stavka2
+  {
+      text-align: center;
+      flex-direction: column;
+      
+  }
+  
+}
+@media screen and (min-width: 830px)
+{
+    .stavka2
+  {
+      flex-direction: row;
+  } 
+}
+.stavka2 .Dugme
+{
+   padding:10px;
+   margin:0px 5px;
+   font-size: 0.7em;
+}
+
+body
+{
+  background-color: #ffffff;
+opacity: 1;
+background-image: linear-gradient(to right, #ece4df, #ece4df 9px, #ffffff 9px, #ffffff );
+background-size: 18px 100%;
+ font-family: "Bebas Neue", sans-serif;
+}
+.Images {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start; 
+  gap: 10px;
+}
+
+.Slika {
+  flex: 0 1 300px;
+  max-width:160px;
+}
+.SlikaPreko
+{
+    transition-duration: 1s;
+}
+
+.SlikaPreko:hover
+{
+    
+    filter: blur(40px);
+    filter: grayscale(100%);
+    transition-duration: 1s;
+}
+
+
+
+
+

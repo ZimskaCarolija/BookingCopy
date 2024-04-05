@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <link rel="stylesheet" type="text/css" href="glavni.css">
+     <link rel="stylesheet" type="text/css" href="reset.css">
+     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+ <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue" rel="stylesheet">
+         <link rel="stylesheet" type="text/css" href="glavni.css">
+            <script src="PromenaSlike.js"></script>
+    </head>
+    <body >
+         <div class="topnav" id="myTopnav">
+          <a class="active">Admin Dashboard</a>
+          
+          <a href="DodavanjeDrzave.html">Add Country</a>
+          <a href="SveDrzave.html">All Countries</a>
+      
+          <a href="DodavanjeAmenitija.html">Add Amenity</a>
+          <a href="SviAmenitiji.html">All Amenities</a>
+          
+          <a href="DodavanjeGrada.html">Add City</a>
+          <a href="SviGradovi.html">All Cities</a>
+          
+          <a href="SviKorisnici.html">All Users</a>
+          
+          <a href="javascript:void(0);" class="icon" onclick="Meni()">
+            <i class="fa fa-bars"></i>
+          </a>
+        </div>
+        <h1 class="GlavniNaslov">Add Country</h1>
+        <div class="kontejner">
+             <div id="mail">Name : <input type="text" id="naziv"></div>
+                    
+             <div><button onclick="Dodaj()">Add</button></div>
+         </div>
+        <script>
+            function Dodaj()
+            {
+                const naziv = document.getElementById("naziv").value;
+            $.ajax({
+                url:"http://localhost:8080/DodajDrzavu",
+                type:"POST",
+                data:{naziv:naziv},
+                success:function(result){alert("Success"")},
+                 error: function(xhr, status, error) {
+                console.log( status + " Greška: " + error);
+               if(xhr.responseText == "0")
+                             window.location.href="Login.html";
+                alert(xhr.responseText);
+                }
+            });
+        }
+         </script>
+    </body>
+</html>

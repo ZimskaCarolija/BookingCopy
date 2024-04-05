@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     
+     
+     <link rel="stylesheet" type="text/css" href="reset.css">
+     <link rel="stylesheet" type="text/css" href="glavni.css">
+     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+     <script src="PromenaSlike.js"> </script>
+     
+    </head>
+    <body onload="Ucitaj()">
+        <h1 class="GlavniNaslov">Add RoomType</h1>
+         <div class="kontejner">
+           
+          
+             <div>Room Name <input type="text" id="name"></div>
+             <div> Hotel : <select id="hotel"></select></div>
+             <div>NO Beds : <input type="number" min ="1" max="5" id="noBeds"> </div>
+             <div>Description : <textarea id="opis"> </textarea></div>
+             
+             
+             <button onclick="Sacuvaj()">Add</button>
+         </div>
+       <footer>
+           <div>Hotels</div>
+           <div>Aleksa Velimirovic</div>
+           <div>Personal project made in Spring</div>
+       </footer>
+        <script>          
+           function Ucitaj()
+            {
+
+                   $.post("http://localhost:8080/HoteliUSer", function(data) {
+                        data = JSON.parse(data);
+                        let stavke = document.getElementById("hotel");
+                        stavke.innerHTML = "";
+                        console.log(data);
+                        data.forEach(el => {
+                                let id = el.idHotel;
+                                stavke.innerHTML += `<option value='${id}'>${el.name}</option>`;
+                        });
+                }).fail(function(xhr, status, error) {
+                            if (xhr.responseText == '0' || error == '0') {
+                                window.location.href = "Login.html";
+                            }
+                });
+
+                
+            }
+            function Sacuvaj()
+            {
+                let name = document.getElementById("name").value;
+                let hotel = parseInt(document.getElementById("hotel").value);
+                let noBeds = parseInt(document.getElementById("noBeds").value);
+                let opis = document.getElementById("opis").value;
+                $.post("http://localhost:8080/DodajRoomType", {name: name, hotel: hotel, noBeds: noBeds, opis: opis}, function(data) {
+                    alert(data);
+                }).fail(function(xhr, status, error) {
+                    alert("Error" + xhr);
+                    alert("Error " + error);
+                });
+            }
+           
+        </script>
+    </body>
+</html>

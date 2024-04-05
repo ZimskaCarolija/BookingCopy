@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link rel="stylesheet" type="text/css" href="reset.css">
+     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+ <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue" rel="stylesheet">
+         <link rel="stylesheet" type="text/css" href="glavni.css">
+         <script src="PromenaSlike.js"></script>
+    </head>
+    <body>
+        <div class="topnav" id="myTopnav">
+          <a class="active">Admin Dashboard</a>
+          
+          <a href="DodavanjeDrzave.html">Add Country</a>
+          <a href="SveDrzave.html">All Countries</a>
+      
+          <a href="DodavanjeAmenitija.html">Add Amenity</a>
+          <a href="SviAmenitiji.html">All Amenities</a>
+          
+          <a href="DodavanjeGrada.html">Add City</a>
+          <a href="SviGradovi.html">All Cities</a>
+          
+          <a href="SviKorisnici.html">All Users</a>
+          
+          <a href="javascript:void(0);" class="icon" onclick="Meni()">
+            <i class="fa fa-bars"></i>
+          </a>
+        </div>
+        
+        
+        
+        <div class="Telo">
+            <h1 class="GlavniNaslov">Change Amenity</h1>
+            <div class="kontejner">       
+                <div>Name : <br><input type="text" id="naziv"></div>
+                 <div id="tip">Country : <select id="drzava">
+                 </select></div>
+                <div class="flexY">is showing : <input type="checkbox" id="ban"/></div>
+                
+                 <div><button onclick="sacuvaj()">Save</button></div>
+            </div>
+        </div>
+       <footer>
+           <div>Hotels</div>
+           <div>Aleksa Velimirovic</div>
+           <div>Personal project made in Spring</div>
+       </footer>
+        <script>
+             const params = new URLSearchParams(location.search);
+            if(!params.has("id"))
+            window.location.href="SveDrzave.html";
+            const id = params.get("id");
+            let drzava = "";
+            window.onload = () =>
+            {
+                 $.ajax({
+                    url:"http://localhost:8080/GradID",
+                    type:"POST",
+                    data:{id:id},
+                    success:function(data){
+                        
+                        data = JSON.parse(data);
+                        console.log(data);
+                        document.getElementById("naziv").value = data.gradNaziv;
+                        document.getElementById("ban").checked  = data.prikazuje_se;
+                        drzava = parseInt(data.countryId);
+                    },
+                    error: function(xhr, status, error) {
+                    console.log("Error", xhr.responseText);
+                    alert("Error " + xhr.responseText);
+                    }
+                });
+                $.ajax({
+                    url:"http://localhost:8080/SveDrzave",
+                    type:"POST",
+                    success:function(data)
+                    {
+                        data = JSON.parse(data);
+                        console.log(data);
+                         const prikaz = document.getElementById("drzava");
+                         prikaz.innerHTML = "";
+                         data.forEach(element=>{
+                             let selektovan = "";
+                             if(drzava == element.id)
+                                 selektovan = "selected";
+                            prikaz.innerHTML += `<option value=${element.id} ${selektovan}>${element.naziv}</option>`;
+                         });
+                         
+                    },
+                     error: function(xhr, status, error) {
+                    console.log("Error", xhr.responseText);
+                    alert("Error " + xhr.responseText);
+                    }
+                });
+               
+            }
+            function sacuvaj()
+            {
+                let naziv = document.getElementById("naziv").value;
+                let drzavaId = document.getElementById("drzava").value;
+                let ban  = document.getElementById("ban").checked;
+                $.ajax({
+                    url:"http://localhost:8080/IZmenaGrada",
+                    type:"POST",
+                    data:{cityId:id,name:naziv,ban:ban,countryId:drzavaId},
+                    success:function(result)
+                    {
+                    window.location.href="SviGradovi.html";
+                },
+                error: function(xhr, status, error) {
+                console.log( status + " Greška: " + error);
+               if(xhr.responseText == "0")
+                             window.location.href="Login.html";
+                alert("Error");
+                }
+                });
+            }
+        </script>
+    </body>
+</html>

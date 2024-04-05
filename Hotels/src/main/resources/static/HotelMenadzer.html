@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="reset.css">
+     <link rel="stylesheet" type="text/css" href="glavni.css">
+     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+     <script src="PromenaSlike.js"> </script>
+    </head>
+    <body>
+       <h1 class="GlavniNaslov">My Hotels</h1>
+         <div class="kontejner">
+             <div id="stavke">
+                 <div class="stavka2"><div>aki.velimirovic@gmail.com</div><div><a class="Dugme">Change</a><a class="Dugme">Amenities</a><a class="Dugme">Rooms</a></div></div>
+             </div>
+          </div>
+    </body>
+    <script>
+         $.post("http://localhost:8080/HoteliUSer",function(data){
+             data  =JSON.parse(data);
+             let stavke = document.getElementById("stavke");
+             stavke.innerHTML = "";
+             console.log(data);
+             data.forEach(el=>{
+                 let id= el.idHotel;
+                 stavke.innerHTML +=`<div class="stavka2"><div>${el.name}</div><div><a class="Dugme" href='HotelIzmeni.html?id=${id}'}>Change</a><a class="Dugme">Amenities</a><a class="Dugme">Rooms</a></div></div>`
+             });
+         });
+       </script>
+</html>
