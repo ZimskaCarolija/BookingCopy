@@ -1027,5 +1027,69 @@ public class HotelsApplication {
            
                    
       }
+       @PostMapping("/AddRoomAmenity")
+      public ResponseEntity<?> AddRoomAmenity(HttpServletRequest request , @RequestParam ("idRoomType") int idRoomType , @RequestParam ("idAmenity") int idAmenity)
+      {
+          if(!Sesije.ProveriOvlascenje(request,2))
+           {
+               return ResponseEntity.badRequest().body("0");
+           }
+          try
+          {
+                Korisnik k  = (Korisnik)request.getSession().getAttribute("korisnik");
+             Connection con = Konekcija.VratiKonekciju();
+             PreparedStatement st = con.prepareStatement("insert into room_amenity(room_type_id,amenity_id) values(?,?)");
+              st.setInt(1, idRoomType);
+              st.setInt(2, idAmenity);
+              int noOfAffectedRows = st.executeUpdate();
+              if(noOfAffectedRows<1)
+              throw new Exception("Error not affected");
+              return ResponseEntity.ok("Success!!");
+          }
+          catch(Exception ex)
+          {
+                return ResponseEntity.badRequest().body(ex.getMessage());
+          }
+      }
+       @PostMapping("/DeleteRoomAmenity")
+      public ResponseEntity<?> DeleteRoomAmenity(HttpServletRequest request,@RequestParam ("idRoomType") int idRoomType , @RequestParam ("idAmenity") int idAmenity)
+      {
+          if(!Sesije.ProveriOvlascenje(request,2))
+           {
+               return ResponseEntity.badRequest().body("0");
+           }
+          try
+          {
+                Korisnik k  = (Korisnik)request.getSession().getAttribute("korisnik");
+             Connection con = Konekcija.VratiKonekciju();
+             PreparedStatement st = con.prepareStatement("delete from room_amenity where room_type_id = ? and  amenity_id = ?");
+              st.setInt(1, idRoomType);
+              st.setInt(2, idAmenity);
+              int noOfAffectedRows = st.executeUpdate();
+              if(noOfAffectedRows<1)
+              throw new Exception("Error not affected");
+              return ResponseEntity.ok("Success!!");
+          }
+          catch(Exception ex)
+          {
+                return ResponseEntity.badRequest().body(ex.getMessage());
+          }
+      }
+        @PostMapping("/ReturnAmenityRoom")
+      public ResponseEntity<?> ReturnAmenityRoom(@RequestParam ("id") int idRoom )
+      {
+          try
+          {
+          ArrayList<Amenity> amenitiji = Amenity.returnByRoomlId(idRoom);
+          ObjectMapper maper = new ObjectMapper();
+          String str  =  maper.writeValueAsString(amenitiji);
+          return ResponseEntity.ok(str);
+          }
+          catch(Exception ex)
+          {
+              return ResponseEntity.badRequest().body(ex.getMessage());
+          }
+          
+      }
       
 }

@@ -136,4 +136,27 @@ public class Amenity {
         con.close();
         return svi;
     }
+       public static ArrayList<Amenity> returnByRoomlId(int roomID) throws SQLException
+    {
+        ArrayList<Amenity> all = new ArrayList<>();
+        Connection con  = Konekcija.VratiKonekciju();
+        PreparedStatement st = con.prepareStatement("select a.amenity_id , a.amenity_name , a.amenity_desc , a.banovan,a.amenity_image from room_amenity r ,"
+                + " amenities a where r.amenity_id = a.amenity_id and r.room_type_id  = ?;");
+        st.setInt(1, roomID);
+        ResultSet re = st.executeQuery();
+        while(re.next())
+        {
+            int id = re.getInt("amenity_id");
+            String ime = re.getString("amenity_name");
+            String opis = re.getString("amenity_desc");
+            byte[] bitovi = re.getBytes("amenity_image");
+            boolean Banovan = re.getBoolean("banovan");
+            String slika = Base64.getEncoder().encodeToString(bitovi);
+            Amenity a = new Amenity(id,ime,opis,slika,Banovan);
+            all.add(a);
+            
+        }
+        con.close();
+        return all;
+    }
 }

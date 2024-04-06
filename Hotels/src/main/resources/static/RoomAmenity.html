@@ -50,7 +50,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
            }
            function LoadAmenityImages()
            {
-               $.post("http://localhost:8080/ReturnMAenityHotel_ID",{id:id},function (data){
+               $.post("http://localhost:8080/ReturnAmenityRoom",{id:id},function (data){
                    data = JSON.parse(data);
                    let stavke = document.getElementById("stavke");
                   
@@ -66,7 +66,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
            function Delete(idAmenity)
            {
                
-               $.post("http://localhost:8080/DeleteHotelAmenity",{idHotel:id,idAmenity:idAmenity},function (data){
+               $.post("http://localhost:8080/DeleteRoomAmenity",{idRoomType:id,idAmenity:idAmenity},function (data){
                    
                  LoadAmenityImages();
                   alert(data);
@@ -78,7 +78,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
            {
                
                let idA = document.getElementById("amenityAll").value;
-               $.post("http://localhost:8080/AddHotelAMenity",{idHotel:id,idAmenity:idA},function (data){
+               $.post("http://localhost:8080/AddRoomAmenity",{idRoomType:id,idAmenity:idA},function (data){
                    alert(data);
                    LoadAmenityImages()();
                }).fail(function(xhr, status, error) {
