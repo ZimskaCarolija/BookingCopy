@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     
+     
+     <link rel="stylesheet" type="text/css" href="reset.css">
+     <link rel="stylesheet" type="text/css" href="glavni.css">
+     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+     <script src="PromenaSlike.js"> </script>
+     
+    </head>
+    <body onload="Ucitaj()">
+        <h1 class="GlavniNaslov">Edit Room</h1>
+         <div class="kontejner">
+             <div>Room Number : <input type="number" id="number" value="1"/></div>
+             <div>Room Name : <input type="text" id="name"/></div>
+             <div>Room Type: <select id="roomType"></select></div>
+             <div class="flexY">is showing : <input type="checkbox" id="ban"/></div>
+             <div><button onclick="Edit()">Edit</button></div>
+             <div class="stavke"></div>
+             
+            
+         </div>
+       <footer>
+           <div>Hotels</div>
+           <div>Aleksa Velimirovic</div>
+           <div>Personal project made in Spring</div>
+       </footer>
+        <script>
+            const searchParams = new URLSearchParams(window.location.search);
+            if(!searchParams.has('idR'))
+                window.location.href='HotelRooms.html';
+            let idR= searchParams.get('idR');
+            if(!searchParams.has('idH'))
+                window.location.href='HotelMenadzer.html';
+            let idH= searchParams.get('idH');
+             function Ucitaj()
+            {
+                
+                    $.post("http://localhost:8080/RoomId",{RoomId:idR}, function(data) {
+                       data = JSON.parse(data);
+                       console.log(data);
+                       let RoomName  = data.roomName;
+                       let room_id  = data.room_id;
+                       let room_number = data.room_number;
+                       let showing = data.showing;
+                       let room_type_id = data.room_type_id;
+                        let noRoom  = document.getElementById("number").value = room_number;
+                        let name  = document.getElementById("name").value  = RoomName;                       
+                        let ban  = document.getElementById("ban").checked= showing;
+                           
+                           
+                                            $.post("http://localhost:8080/RoomTypesHotel",{HotelID:idH}, function(data) {
+                                       data = JSON.parse(data);
+                                       console.log(data);
+                                       let roomType = document.getElementById("roomType");
+                                       roomType.innerHTML = "";
+                                       data.forEach(el =>{
+                                           let str = "";
+                                           if(el.room.room_type_id == room_type_id)
+                                               str = "Selected"
+                                           roomType.innerHTML += 
+                                            `<option value='${el.room.room_type_id}' ${str}>${el.room.room_type_name}</option>`;
+
+                                       });
+                                        }).fail(function(xhr, status, error) {
+                                                alert(xhr.responseText);
+                                        });
+                           
+                           
+                      
+                   }).fail(function(xhr, status, error) {
+                           alert(xhr.responseText);
+                });
+                    
+                
+                  
+           }
+            function Edit()
+            {
+                let noRoom  = document.getElementById("number").value;
+                let name  = document.getElementById("name").value;
+                let roomType  = document.getElementById("roomType").value;
+                let ban  = document.getElementById("ban").checked;
+                $.post("http://localhost:8080/EditRoom",{room_number:noRoom,room_name:name,room_type_id:roomType,ban:ban,room_id:idR},function(data){
+                    alert(data);
+                }).fail(function(xhr,status,error){
+                    alert(xhr.responseText);
+                    if(xhr.responseText == '0')
+                        window.location.href="Login.html";
+                });
+            }
+
+        </script>
+    </body>
+</html>

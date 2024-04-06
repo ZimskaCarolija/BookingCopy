@@ -88,5 +88,23 @@ public class Room {
         }
         return rooms;
     }
+    public static Room RoomByID(int roomId) throws Exception
+    {
+        Connection con = Konekcija.VratiKonekciju();
+        PreparedStatement st = con.prepareStatement("select * from room where room_id =?;");
+        st.setInt(1, roomId);
+        ResultSet rs = st.executeQuery();
+        while(rs.next())
+        {
+            int room_id = rs.getInt("room_id");
+            int room_number = rs.getInt("room_number");
+            String room_name = rs.getString("room_name");
+            boolean banovan = rs.getBoolean("banovan");
+            int room_type_id = rs.getInt("room_type_id");
+            Room r = new Room(room_id,room_number,room_name,banovan,room_type_id);
+            return r;
+        }
+        throw new Exception("Not Found");
+    }
     
 }

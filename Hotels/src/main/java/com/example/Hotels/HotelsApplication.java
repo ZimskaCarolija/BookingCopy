@@ -8,6 +8,7 @@ import Klase.HotelImages;
 import Klase.Konekcija;
 import Klase.Korisnik;
 import Klase.KorisnikEmail;
+import Klase.Room;
 import Klase.RoomType;
 import Klase.RoomTypeHotel;
 import Klase.RoomTypeImage;
@@ -952,5 +953,79 @@ public class HotelsApplication {
                 return ResponseEntity.badRequest().body("Error : " + ex.getMessage());
             }
         }
+      @PostMapping("/RoomHotel")
+      public ResponseEntity<?> RoomHotel(@RequestParam("HotelID") int hotelID)
+      {
+          try
+          {
+              ArrayList<Room> rooms  = Room.RoomHotel(hotelID);
+              ObjectMapper maper = new ObjectMapper();
+              String returnString = maper.writeValueAsString(rooms);
+              return ResponseEntity.ok(returnString);
+          }
+          catch(Exception ex)
+          {
+              return ResponseEntity.badRequest().body("Error : " + ex.getMessage());
+          }
+      }
+       @PostMapping("/RoomId")
+      public ResponseEntity<?> RoomId(@RequestParam("RoomId") int RoomId)
+      {
+          try
+          {
+              Room room = Room.RoomByID(RoomId);
+              ObjectMapper maper = new ObjectMapper();
+              String returnString = maper.writeValueAsString(room);
+              return ResponseEntity.ok(returnString);
+          }
+          catch(Exception ex)
+          {
+              return ResponseEntity.badRequest().body("Error : " + ex.getMessage());
+          }
+          
+      }
+      @PostMapping("/EditRoom")
+      public ResponseEntity<?>EditRoom(HttpServletRequest request,@RequestParam("room_number") int room_number,
+       @RequestParam("room_name") String room_name,@RequestParam("room_type_id") int room_type_id,@RequestParam("ban") boolean Showing,@RequestParam("room_id") int room_id)
+      {
+             if(!Sesije.ProveriOvlascenje(request,2))
+           {
+               return ResponseEntity.badRequest().body("0");
+           }
+             Connection con = null;
+            try
+            {
+                 con = Konekcija.VratiKonekciju();
+                PreparedStatement st = con.prepareStatement("update room set room_number = ?,room_name = ?,banovan = ?,room_type_id = ? where room_id = ?;");
+                st.setInt(1, room_number);
+                st.setString(2, room_name);
+                st.setBoolean(3, Showing);
+                st.setInt(4, room_type_id);
+                st.setInt(5, room_id);
+                int noEffected = st.executeUpdate();
+                con.close();
+                if(noEffected<1)
+                    throw new Exception("NO Affected rows : 0 ");
+                return ResponseEntity.ok("success");
+            }
+            catch(Exception ex)
+            {
+                return ResponseEntity.badRequest().body("Error : " + ex.getMessage());
+            }
+            finally
+            {
+                try
+                {
+                if(con!=null)
+                con.close();
+                }
+                catch(Exception ex)
+                {
+                    
+                }
+            }
+           
+                   
+      }
       
 }

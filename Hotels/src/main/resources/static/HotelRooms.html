@@ -23,8 +23,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
              <div>Room Name : <input type="text" id="name"/></div>
              <div>Room Type: <select id="roomType"></select></div>
              <div class="flexY">is showing : <input type="checkbox" id="ban"/></div>
-             <div><button onclick="Add()">Add</button></div>
-             <div class="stavke"></div>
+             <div><button onclick="Add()">Save</button></div>
+             <div class="stavke" id="stavke"></div>
              
             
          </div>
@@ -40,7 +40,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
             let id= searchParams.get('id');
              function Ucitaj()
             {
-                    alert(id);
+                LoadRooms();
                    $.post("http://localhost:8080/RoomTypesHotel",{HotelID:id}, function(data) {
                        data = JSON.parse(data);
                        console.log(data);
@@ -63,13 +63,27 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 let ban  = document.getElementById("ban").checked;
                 $.post("http://localhost:8080/AddRoom",{room_number:noRoom,room_name:name,room_type_id:roomType,ban:ban},function(data){
                     alert(data);
+                    LoadRooms();
                 }).fail(function(xhr,status,error){
                     alert(xhr.responseText);
                     if(xhr.responseText == '0')
                         window.location.href="Login.html";
                 });
             }
-
+            function LoadRooms()
+            {
+                 $.post("http://localhost:8080/RoomHotel",{HotelID:id},function(data){
+                     data = JSON.parse(data);
+                    let stavke = document.getElementById("stavke");
+                    stavke.innerHTML = "";
+                    data.forEach(el =>{
+                       stavke.innerHTML+=`<div class='stavka'><div>${el.roomName} Number : ${el.room_number}</div> <div><a class='Dugme' href='RoomEdit.html?idR=${el.room_id}&idH=${id}'>Edit</a></div></div>`; 
+                    });
+                    
+                }).fail(function(xhr,status,error){
+                    alert(xhr.responseText);
+                });
+            }
         </script>
     </body>
 </html>
