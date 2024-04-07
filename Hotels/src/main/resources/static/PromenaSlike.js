@@ -26,3 +26,11 @@ function Meni()
     x.className = "topnav";
   }
 }
+function Logout()
+{
+    $.post("http://localhost:8080/Logout",function (data){
+        window.location.href="Login.html";
+    }).fail(function(xhr, status, error) {
+                           alert(xhr.responseText);
+                });
+}

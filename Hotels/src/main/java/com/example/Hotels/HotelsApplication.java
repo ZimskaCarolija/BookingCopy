@@ -2,12 +2,14 @@ package com.example.Hotels;
 
 import Klase.Amenity;
 import Klase.Drzava;
+import Klase.EmailService;
 import Klase.Grad;
 import Klase.Hotel;
 import Klase.HotelImages;
 import Klase.Konekcija;
 import Klase.Korisnik;
 import Klase.KorisnikEmail;
+import Klase.MailConfiq;
 import Klase.Room;
 import Klase.RoomType;
 import Klase.RoomTypeHotel;
@@ -25,7 +27,9 @@ import java.util.ArrayList;
 import java.util.Base64;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,6 +38,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @SpringBootApplication
 @RestController
+@ComponentScan(basePackages = {"com.example.Hotels", "KOntroleri"})
 public class HotelsApplication {
 
 	public static void main(String[] args) {
@@ -1037,6 +1042,10 @@ public class HotelsApplication {
           try
           {
                 Korisnik k  = (Korisnik)request.getSession().getAttribute("korisnik");
+                 if(!RoomType.ProveraSobaUser(k.getId(), idRoomType))
+                {
+                return ResponseEntity.badRequest().body("You are not owner of room");
+                }
              Connection con = Konekcija.VratiKonekciju();
              PreparedStatement st = con.prepareStatement("insert into room_amenity(room_type_id,amenity_id) values(?,?)");
               st.setInt(1, idRoomType);
@@ -1061,6 +1070,10 @@ public class HotelsApplication {
           try
           {
                 Korisnik k  = (Korisnik)request.getSession().getAttribute("korisnik");
+                 if(!RoomType.ProveraSobaUser(k.getId(), idRoomType))
+                {
+                return ResponseEntity.badRequest().body("You are not owner of room");
+                }
              Connection con = Konekcija.VratiKonekciju();
              PreparedStatement st = con.prepareStatement("delete from room_amenity where room_type_id = ? and  amenity_id = ?");
               st.setInt(1, idRoomType);
@@ -1090,6 +1103,21 @@ public class HotelsApplication {
               return ResponseEntity.badRequest().body(ex.getMessage());
           }
           
+      }
+      @PostMapping("/Logout")
+      public ResponseEntity<?> Logout(HttpServletRequest request,HttpServletResponse response)
+      {
+          try
+          {
+              
+          Korisnik k  = (Korisnik)request.getSession().getAttribute("korisnik");
+          Sesije.Loggout(k, request);
+          return ResponseEntity.ok("Success!!");
+          }
+          catch(Exception ex)
+          {
+               return ResponseEntity.badRequest().body(ex.getMessage());
+          }
       }
       
 }

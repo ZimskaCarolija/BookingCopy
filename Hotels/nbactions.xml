@@ -15,6 +15,11 @@
                 <exec.appArgs></exec.appArgs>
                 <exec.mainClass>com.example.Hotels.HotelsApplication</exec.mainClass>
                 <exec.executable>java</exec.executable>
+                <Env.FOO>bar</Env.FOO>
+                <Env.EMAIL>sunsetnfts@gmail.com</Env.EMAIL>
+                <Env.PASSWORD>AkikisnicaAKI02!!</Env.PASSWORD>
+                <Env.EMAIL_HOST>smtp.gmail.com</Env.EMAIL_HOST>
+                <Env.EMAIL_PORT>587</Env.EMAIL_PORT>
             </properties>
         </action>
         <action>
