@@ -73,9 +73,11 @@ function PromenaSlike()
 function verify()
 {
     alert('Verify clicked');
-     $.post("http://localhost:8080/Email/Verify", function(data) {                                               
+     $.post("http://localhost:8080/Verify", function(data) {                                               
                       alert(data);
+                     
                    }).fail(function(xhr, status, error) {
                            alert(xhr.responseText);
+                            console.log(xhr.responseText);
                 });
 }

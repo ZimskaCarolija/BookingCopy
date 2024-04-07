@@ -4,6 +4,7 @@
  */
 package Klase;
 
+import java.util.Properties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -13,15 +14,21 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
  *
  * @author Aleksa
  */
-@Configuration
 public class MailConfiq {
-    @Bean
-    public JavaMailSender javaMailSender() {
+    
+    public static  JavaMailSender javaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        mailSender.setHost(System.getenv("EMAIL_HOST"));
-        mailSender.setPort(Integer.parseInt(System.getenv("EMAIL_PORT")));
-        mailSender.setUsername(System.getenv("EMAIL_USERNAME"));
-        mailSender.setPassword(System.getenv("EMAIL_PASSWORD"));
+mailSender.setProtocol("smtp");
+mailSender.setHost("smtp.gmail.com"); // Direktno koristimo Gmail SMTP server
+mailSender.setPort(587); // Gmail STARTTLS port
+mailSender.setUsername(System.getenv("EMAIL"));
+mailSender.setPassword(System.getenv("PASSWORD"));
+
+Properties props = mailSender.getJavaMailProperties();
+props.put("mail.smtp.auth", "true");
+props.put("mail.smtp.starttls.enable", "true");
+props.put("mail.debug", "true"); // Korisno za debug, može se isključiti u produkciji
+
         return mailSender;
     }
 }

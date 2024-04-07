@@ -25,6 +25,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Base64;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
@@ -38,12 +39,16 @@ import org.springframework.web.multipart.MultipartFile;
 
 @SpringBootApplication
 @RestController
-@ComponentScan(basePackages = {"com.example.Hotels", "KOntroleri"})
+//@ComponentScan(basePackages = {"com.example.Hotels", "KOntroleri"})
 public class HotelsApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(HotelsApplication.class, args);
 	}
+        
+    
+
+
  @GetMapping("/")
    public String a()
    {
@@ -1119,5 +1124,26 @@ public class HotelsApplication {
                return ResponseEntity.badRequest().body(ex.getMessage());
           }
       }
-      
+       @PostMapping("/Verify")
+    public ResponseEntity<String> sendEmail(HttpServletRequest request) {
+        try {
+          EmailService  emailService = new EmailService(MailConfiq.javaMailSender());
+            // Your logic to check if user is logged in
+            if (request.getSession().getAttribute("korisnik") == null) {
+                throw new Exception("You are not logged in");
+            }
+
+            // Assuming 'Korisnik' contains an email field
+            Korisnik k = (Korisnik) request.getSession().getAttribute("korisnik");
+           
+           String str = "<div><h1>Click on Link To Verify</h1><a href='http://localhost:8080/Profil.html?id=" + k.getEmail() + "'>Link</a></div>";
+
+            // Sending email
+            emailService.sendEmail(k.getEmail(),"Verify" , str);
+            
+            return ResponseEntity.ok("Check your mail");
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
+    }
 }
