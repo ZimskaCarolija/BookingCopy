@@ -14,6 +14,7 @@ import Klase.Room;
 import Klase.RoomType;
 import Klase.RoomTypeHotel;
 import Klase.RoomTypeImage;
+import Klase.Security;
 import Klase.Sesije;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -1128,17 +1129,14 @@ public class HotelsApplication {
     public ResponseEntity<String> sendEmail(HttpServletRequest request) {
         try {
           EmailService  emailService = new EmailService(MailConfiq.javaMailSender());
-            // Your logic to check if user is logged in
+            
             if (request.getSession().getAttribute("korisnik") == null) {
                 throw new Exception("You are not logged in");
             }
-
-            // Assuming 'Korisnik' contains an email field
-            Korisnik k = (Korisnik) request.getSession().getAttribute("korisnik");
-           
-           String str = "<div><h1>Click on Link To Verify</h1><a href='http://localhost:8080/Profil.html?id=" + k.getEmail() + "'>Link</a></div>";
-
-            // Sending email
+            
+            Korisnik k = (Korisnik) request.getSession().getAttribute("korisnik"); 
+            String SecureToken = Security.TwoFaToken(k.getId());
+           String str = "<div><h1>Click on Link To Verify</h1><a href='http://localhost:8080/TwoFaVerify.html?id=" + k.getId() + "&token="+ SecureToken  +"'>Link</a></div>";
             emailService.sendEmail(k.getEmail(),"Verify" , str);
             
             return ResponseEntity.ok("Check your mail");
