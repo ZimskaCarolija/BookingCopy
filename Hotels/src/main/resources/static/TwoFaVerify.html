@@ -16,8 +16,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
      <script src="PromenaSlike.js"> </script>
     </head>
     <body>
+        <div class="kontejner kS" style="height:80%">
         <h1 class="GlavniNaslov">Verify</h1>
-        <button class="Dugme">Klick to verify</button>
+            <div style="display: flex; align-items: center; justify-content: center;height:80%;">
+            <button class="Dugme" onclick="Veify()" style="font-size:30px;padding:20px">Click to verify</button>
+            </div>
+        </div>
     </body>
     <script>
         const params = new URLSearchParams(location.search);
@@ -25,5 +29,13 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 alert("Error");
             let id= params.get("id");
             let token  = params.get("token");
+            function Veify(){
+            $.post("http://localhost:8080/VerifyUpdate",{id:id,token:token},function (data){
+                  alert(data);
+                  window.location.href="Login.html";
+               }).fail(function(xhr, status, error) {
+                           alert(xhr.responseText);
+                });
+            }
     </script>
 </html>

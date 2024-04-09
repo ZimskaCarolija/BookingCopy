@@ -51,9 +51,8 @@ public abstract class Security {
          return securT;
          
      }
-     public static void CheckSecurityTimeStamp(int idUser) throws Exception
+     public static void CheckSecurityTimeStamp(int idUser,Connection con) throws Exception
      {
-         Connection con = Konekcija.VratiKonekciju();
          PreparedStatement st = con.prepareStatement("select security_date from users where user_id = ?");
          st.setInt(1, idUser);
          ResultSet rs = st.executeQuery();
@@ -73,7 +72,7 @@ public abstract class Security {
                  con.close();
                  throw new Exception("Expired");
              }
-          con.close();
+        
          
      }
      public static void SecurityCheckVerify(int idUser , String token,Connection con) throws Exception
@@ -99,6 +98,21 @@ public abstract class Security {
          int noAffected = st.executeUpdate();
          if(noAffected<1)
              throw new Exception("NO Affected is 0");
+     }
+     public static void SecurityCode(int IdUser,Connection con) throws  Exception
+     {
+         PreparedStatement st = con.prepareStatement("update users set security_code = ? where user_id = ?");
+         Random random = new Random();
+         int code = random.nextInt(1000, 9999);
+         st.setInt(1, code);
+          st.setInt(2, IdUser);
+         int noEffected = st.executeUpdate();
+         if(noEffected<1)
+         {
+             con.close();
+             throw new Exception("Zero rows Affected");
+         }
+         
      }
      
 }

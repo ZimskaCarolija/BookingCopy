@@ -1136,7 +1136,7 @@ public class HotelsApplication {
             
             Korisnik k = (Korisnik) request.getSession().getAttribute("korisnik"); 
             String SecureToken = Security.TwoFaToken(k.getId());
-           String str = "<div><h1>Click on Link To Verify</h1><a href='http://localhost:8080/TwoFaVerify.html?id=" + k.getId() + "&token="+ SecureToken  +"'>Link</a></div>";
+           String str = "<div><h1>Click on Link To Verify</h1><div style='text-align:center'>Hotels says  - This link is valid for only 2 min <a href='http://localhost:8080/TwoFaVerify.html?id=" + k.getId() + "&token="+ SecureToken  +"'>Link</a></div></div>";
             emailService.sendEmail(k.getEmail(),"Verify" , str);
             
             return ResponseEntity.ok("Check your mail");
@@ -1144,4 +1144,37 @@ public class HotelsApplication {
             return ResponseEntity.badRequest().body(ex.getMessage());
         }
     }
+     @PostMapping("/VerifyUpdate")
+     public ResponseEntity<String> VerifyUpdate(HttpServletRequest request,@RequestParam("id") int idUser , @RequestParam("token") String token) 
+     {
+         Connection con = null;
+         try
+         {
+             con = Konekcija.VratiKonekciju();
+            Security.CheckSecurityTimeStamp(idUser,con);
+            Security.SecurityCheckVerify(idUser, token, con);
+            Security.UpdateSQlVerify(idUser, con);
+            if((Korisnik)request.getSession().getAttribute("korisnik")!=null)
+            {
+           Korisnik k  = (Korisnik)request.getSession().getAttribute("korisnik");
+          Sesije.Loggout(k, request);
+            }
+            return ResponseEntity.ok("Success");
+         }
+         catch(Exception ex)
+         {
+             return ResponseEntity.badRequest().body(ex.getMessage());
+         }
+         finally
+          {
+              try       
+              {
+              con.close();
+              }
+              catch(Exception ex){
+              return ResponseEntity.badRequest().body(ex.getMessage());
+              }
+          }
+                     
+     }
 }
