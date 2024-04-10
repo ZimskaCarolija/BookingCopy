@@ -8,8 +8,35 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
         <title>TODO supply a title</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="reset.css">
+         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+ <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue" rel="stylesheet">
+     <link rel="stylesheet" type="text/css" href="glavni.css">
+     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+     <script src="PromenaSlike.js"> </script>
     </head>
     <body>
-        <div>TODO write content</div>
+        <div class="kontejner kS" style="height:80%">
+        <h1 class="GlavniNaslov">Check your E-mail for code</h1>
+            <div style="display: flex; align-items: center; justify-content: space-evenly;height:80%; flex-direction: column">
+                <input type="number" id="code" style="font-size:15px; padding:10px;"><br>
+                <button class="Dugme" onclick="Send()" style="font-size:30px;padding:20px">Click to verify</button>
+            </div>
+        </div>
     </body>
+    <script>
+        const params = new URLSearchParams(location.search);
+            if(!params.has("id") || !params.has("token"))
+                alert("Error");
+            let id= params.get("id");
+            let token  = params.get("token");
+            function Veify(){
+            $.post("http://localhost:8080/VerifyUpdate",{id:id,token:token},function (data){
+                  alert(data);
+                  window.location.href="Login.html";
+               }).fail(function(xhr, status, error) {
+                           alert(xhr.responseText);
+                });
+            }
+    </script>
 </html>
