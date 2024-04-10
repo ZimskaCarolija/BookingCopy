@@ -4,6 +4,7 @@
  */
 package Klase;
 
+import jakarta.servlet.http.HttpServletResponse;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -99,7 +100,7 @@ public abstract class Security {
          if(noAffected<1)
              throw new Exception("NO Affected is 0");
      }
-     public static void SecurityCode(int IdUser,Connection con) throws  Exception
+     public static void SecurityCode(int IdUser,Connection con,String Email) throws  Exception
      {
          PreparedStatement st = con.prepareStatement("update users set security_code = ? where user_id = ?");
          Random random = new Random();
@@ -110,9 +111,21 @@ public abstract class Security {
          if(noEffected<1)
          {
              con.close();
+            
              throw new Exception("Zero rows Affected");
          }
+            EmailService  emailService = new EmailService(MailConfiq.javaMailSender());
+            String str = "<div><h1>Security Code</h1><div style='text-align:center'>Hotels says  - Your Code for Login is : "+code+"</div></div>";
+            emailService.sendEmail(Email,"Verify" , str);
          
+     }
+     public static String RedirectLoginCode(int Id , HttpServletResponse response,String email,Connection con) throws Exception//sends data to 
+     {
+              SecurityCode(Id,con,email);
+              String token = TwoFaToken(Id);
+              return("SecurityCodeLogin.html?id="+Id+"&token="+token);
+            
+
      }
      
 }

@@ -58,19 +58,37 @@ public class HotelsApplication {
    
    
    @PostMapping("/login")
-   public boolean Logovanje(@RequestParam("email")String email,@RequestParam("password")String password,HttpServletRequest request)
+   public ResponseEntity<?> Logovanje(@RequestParam("email")String email,@RequestParam("password")String password,HttpServletRequest request,HttpServletResponse response)
    {
+       Connection con = null;
+       try
+       {
+           con = Konekcija.VratiKonekciju();
        Korisnik k = new Korisnik();
-        k = Korisnik.LoginProvera(email,password);
+        k = Korisnik.LoginProvera(email,password,con);
         if(k==null || k.getId()<0)
         {
-            return false;
+            return ResponseEntity.badRequest().body("Error");
         }
         else
         {
+            if(k.isVerified())
+            {
+                return ResponseEntity.ok(Security.RedirectLoginCode(k.getId(), response,k.getEmail(),con));
+                
+            }
+            else
+            {
+            Sesije.Loggout(k, request);
             Sesije.Login(k, request);
-            return true;
+            return ResponseEntity.ok("Profil.html");
+            }
         }
+       }
+       catch(Exception ex)
+       {
+          return ResponseEntity.badRequest().body(ex.getMessage());
+       }
         
    }
    @PostMapping("/AccLogged")

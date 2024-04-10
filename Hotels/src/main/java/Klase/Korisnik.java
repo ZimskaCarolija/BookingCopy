@@ -108,13 +108,10 @@ public class Korisnik {
         return false; // Vrati false ako se dogodi izuzetak
     }
     }
-    public static Korisnik LoginProvera(String mail,String password)
+    public static Korisnik LoginProvera(String mail,String password,Connection connection) throws Exception
     {
         Korisnik k =new Korisnik();
-        
-        Connection connection = Konekcija.VratiKonekciju();
-     try
-     {
+   
      PreparedStatement st = connection.prepareStatement("Select * from Users where email = ? and pass = Password(?);");
      st.setString(1,mail);
      st.setString(2,password);
@@ -127,14 +124,7 @@ public class Korisnik {
          k.setId_accType(rs.getInt("acc_type_id"));
          k.setVerified(rs.getBoolean("verified"));
          k.setBan(rs.getBoolean("banovan"));
-        connection.close();
          return k;
-     }
-     connection.close();
-     }
-     catch(Exception ex)
-     {
-     return k;
      }
         return k;
     }
