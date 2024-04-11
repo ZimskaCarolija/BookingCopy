@@ -1195,4 +1195,48 @@ public class HotelsApplication {
           }
                      
      }
+     @PostMapping("TwoFaLOgin")
+     public ResponseEntity<String> TwoFaLOgin(HttpServletRequest request,@RequestParam("id") int id , @RequestParam ("token")String token,@RequestParam("code") int code)
+     {
+         Connection con = null;
+         try
+         {
+             con = Konekcija.VratiKonekciju();
+             Security.CheckSecurityTimeStamp(id,con);
+             PreparedStatement st = con.prepareStatement("select 1 from users where user_id = ? and secuity_token = ? and security_code = ?");
+             st.setInt(1, id);
+             st.setString(2, token);
+             st.setInt(3, code);
+             ResultSet rs = st.executeQuery();
+             if(rs.next())
+             {
+                 
+             }
+             else
+             {
+                 return ResponseEntity.badRequest().body("Error data does not match!!!!!");
+             }
+             con.close();
+             Korisnik k = Korisnik.VratiPoId(id);
+             //if(k == null)
+                 //throw new Exception("Id not found");
+             Sesije.Login(k, request);
+             return ResponseEntity.ok("aaaa");
+         }
+         catch(Exception ex)
+         {
+         return ResponseEntity.badRequest().body(ex.getMessage());
+         }
+         finally
+         {
+             try
+             {
+                 con.close();
+             }
+             catch(Exception ex2)
+             {
+                 return ResponseEntity.badRequest().body(ex2.getMessage());
+             }
+         }
+     }
 }
