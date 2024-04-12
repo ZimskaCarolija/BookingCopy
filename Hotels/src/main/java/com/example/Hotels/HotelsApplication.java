@@ -614,7 +614,7 @@ public class HotelsApplication {
                 ArrayList<RoomTypeHotel> hoteliSobe = new ArrayList<>(); 
                 Korisnik k  = (Korisnik)request.getSession().getAttribute("korisnik");
                 Connection con = Konekcija.VratiKonekciju();
-                PreparedStatement st = con.prepareStatement("select room_type_id,no_beds,room_type_name,desribe,r.hotel_id,r.banovan,hotel_name from room_type r , hotel h where r.hotel_id  = h.hotel_id and  userId = ?");
+                PreparedStatement st = con.prepareStatement("select price,room_type_id,no_beds,room_type_name,desribe,r.hotel_id,r.banovan,hotel_name from room_type r , hotel h where r.hotel_id  = h.hotel_id and  userId = ?");
                 st.setInt(1, k.getId());
                 ResultSet rs = st.executeQuery();
                 
@@ -627,7 +627,8 @@ public class HotelsApplication {
                     boolean banovan = rs.getBoolean("banovan");
                     String desribe = rs.getString("desribe");
                     String hotel_name = rs.getString("hotel_name");
-                    RoomType room = new RoomType(room_type_id,no_beds,room_type_name,desribe,hotel_id,banovan);
+                    int price = rs.getInt("price");
+                    RoomType room = new RoomType(room_type_id,no_beds,room_type_name,desribe,hotel_id,banovan,price);
                     RoomTypeHotel rh = new RoomTypeHotel(room,hotel_name);
                     hoteliSobe.add(rh);
                 }
@@ -955,7 +956,7 @@ public class HotelsApplication {
                 ArrayList<RoomTypeHotel> hoteliSobe = new ArrayList<>(); 
                 Korisnik k  = (Korisnik)request.getSession().getAttribute("korisnik");
                 Connection con = Konekcija.VratiKonekciju();
-                PreparedStatement st = con.prepareStatement("select room_type_id,no_beds,room_type_name,desribe,r.hotel_id,r.banovan,hotel_name from room_type r , hotel h where r.hotel_id  = h.hotel_id and  userId = ? and h.hotel_id = ?");
+                PreparedStatement st = con.prepareStatement("select price,room_type_id,no_beds,room_type_name,desribe,r.hotel_id,r.banovan,hotel_name from room_type r , hotel h where r.hotel_id  = h.hotel_id and  userId = ? and h.hotel_id = ?");
                 st.setInt(1, k.getId());
                 st.setInt(2, hotelID);
                 ResultSet rs = st.executeQuery();
@@ -969,7 +970,8 @@ public class HotelsApplication {
                     boolean banovan = rs.getBoolean("banovan");
                     String desribe = rs.getString("desribe");
                     String hotel_name = rs.getString("hotel_name");
-                    RoomType room = new RoomType(room_type_id,no_beds,room_type_name,desribe,hotel_id,banovan);
+                    int price = rs.getInt("price");
+                    RoomType room = new RoomType(room_type_id,no_beds,room_type_name,desribe,hotel_id,banovan,price);
                     RoomTypeHotel rh = new RoomTypeHotel(room,hotel_name);
                     hoteliSobe.add(rh);
                 }

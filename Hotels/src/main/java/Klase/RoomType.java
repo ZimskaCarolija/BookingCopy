@@ -20,16 +20,26 @@ public class RoomType {
     private String desribe;
     private int hotel_id;
     private boolean banovan;
-
-    public RoomType(int room_type_id, int no_beds, String room_type_name, String desribe, int hotel_id, boolean banovan) {
+    private int price;
+    
+    public RoomType(int room_type_id, int no_beds, String room_type_name, String desribe, int hotel_id, boolean banovan,int price) {
         this.room_type_id = room_type_id;
         this.no_beds = no_beds;
         this.room_type_name = room_type_name;
         this.desribe = desribe;
         this.hotel_id = hotel_id;
         this.banovan = banovan;
+        this.price = price;
     }
 
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+    
     public int getRoom_type_id() {
         return room_type_id;
     }
@@ -103,7 +113,8 @@ public class RoomType {
                     int hotel_id  = rs.getInt("hotel_id");
                     boolean banovan = rs.getBoolean("banovan");
                     String desribe = rs.getString("desribe");
-                    RoomType room = new RoomType(room_type_id,no_beds,room_type_name,desribe,hotel_id,banovan);
+                    int price = rs.getInt("price");
+                    RoomType room = new RoomType(room_type_id,no_beds,room_type_name,desribe,hotel_id,banovan,price);
                     con.close();
                     return room;
         }
