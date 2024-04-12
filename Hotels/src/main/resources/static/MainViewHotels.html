@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="reset.css">
+         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue" rel="stylesheet">
+     <link rel="stylesheet" type="text/css" href="glavni.css">
+     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+     <script src="PromenaSlike.js"> </script>
+    </head>
+    <body onload="Show()">
+        <h1 class="GlavniNaslov">Hotels </h1>
+            <div class="kontejner kS" style="height:80%" id="stavke">
+            <div class="stavka3">
+                <div class="Slika2">
+                    <img src="">
+                </div>
+                <div class="DescHotelS">
+                    <div>
+                        <h2>Hotel Moskva</h2>
+                    </div>
+                    <div>
+                        Stars : 4
+                    </div>
+                    <div class="Location">
+                        <div>Serbia</div><div>Belgrade</div>
+                    </div>
+                    <div class="PriceButton">
+                        <div class="Price">
+                        PRICE : 120
+                         </div>
+                        <div>
+                        <button class="Dugme">View</button>
+                         </div>
+                    </div>
+                </div>
+            </div>
+           
+        </div>
+    </body>
+    <script>
+            function Show(){
+            $.get("http://localhost:8080/HotelExtendedAll",function (data){
+                data = JSON.parse(data);
+                console.log(data);
+                let showContainer = document.getElementById("stavke");
+                showContainer.innerHTML = "";
+                  data.forEach(el=>{
+                      showContainer.innerHTML+=`
+                                        <div class="stavka3">
+                                <div class="Slika2">
+                                    <img src="data:image/png;base64,${el.hotel_img}">
+                                </div>
+                                <div class="DescHotelS">
+                                    <div>
+                                        <h2>${el.name}</h2>
+                                    </div>
+                                    <div>
+                                        Stars : ${el.starts}
+                                    </div>
+                                    <div class="Location">
+                                        <div>${el.countryName}</div><div>${el.cityName}</div>
+                                    </div>
+                                    <div class="PriceButton">
+                                        <div class="Price">
+                                        PRICE : 120${el.MinPrice}
+                                         </div>
+                                        <div>
+                                        <button class="Dugme">View</button>
+                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        `;
+                      
+                  });
+               }).fail(function(xhr, status, error) {
+                           alert(xhr.responseText);
+                });
+            }
+    </script>
+</html>

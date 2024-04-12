@@ -116,7 +116,7 @@ display: none;
 padding:5px;
 }
 
-.stavka,  .stavka2
+.stavka,  .stavka2 , .stavka3
 {
 background-color: #89b0ae;
 padding:5px;
@@ -303,6 +303,70 @@ background-size: 18px 100%;
     filter: blur(40px);
     filter: grayscale(100%);
     transition-duration: 1s;
+}
+
+.DescHotelS
+{
+    display: flex;
+    flex-direction:column;
+}
+.Location
+{
+    display: flex;
+    flex-direction: row;
+    overflow:hidden;
+    justify-content: space-around;
+}
+.Location div
+{
+    border :1px solid black;
+    box-shadow: 2px 2px 2px solid black;
+    padding:7px;
+    font-size: 12px;
+    color:#89b0ae;
+    background-color: #555b6e;
+    margin:10px;
+    overflow:hidden;
+}
+.stavka3 div
+{
+    width:50%;
+}
+.PriceButton
+{
+    display: flex;
+    flex-direction: row;
+    overflow:hidden;
+    justify-content: space-around;
+}
+
+.stavka3 .Slika2
+{
+    width:30%;
+ border:3px solid black;
+ max-height: 400px;
+}
+.stavka3 div img
+{
+     width: 100%; 
+  height: 100%; 
+  object-fit: cover;
+  max-height: 400px;
+  min-height:150px;
+  max-width: none;
+}
+@media screen and (max-width: 830px)
+{
+    .stavka3
+  {
+      flex-direction: column;
+  } 
+  .stavka3 div
+  {
+      width:100%;
+  }
+  
+  
 }
 
 

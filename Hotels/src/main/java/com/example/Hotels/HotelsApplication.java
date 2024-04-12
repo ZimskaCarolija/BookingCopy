@@ -5,6 +5,7 @@ import Klase.Drzava;
 import Klase.EmailService;
 import Klase.Grad;
 import Klase.Hotel;
+import Klase.HotelExtended;
 import Klase.HotelImages;
 import Klase.Konekcija;
 import Klase.Korisnik;
@@ -1226,6 +1227,34 @@ public class HotelsApplication {
          catch(Exception ex)
          {
          return ResponseEntity.badRequest().body(ex.getMessage());
+         }
+         finally
+         {
+             try
+             {
+                 con.close();
+             }
+             catch(Exception ex2)
+             {
+                 return ResponseEntity.badRequest().body(ex2.getMessage());
+             }
+         }
+     }
+     @GetMapping("/HotelExtendedAll")
+     public ResponseEntity<?> HotelExtendedAll()
+     {
+         Connection con = null;
+         try
+         {
+             con = Konekcija.VratiKonekciju();
+             ArrayList<HotelExtended> hotels = HotelExtended.AllHotelExtended(con);
+             ObjectMapper maper = new ObjectMapper();
+             String str = maper.writeValueAsString(hotels);
+             return ResponseEntity.ok(str);
+         }
+         catch(Exception ex)
+         {
+             return ResponseEntity.badRequest().body(ex.getMessage());
          }
          finally
          {
