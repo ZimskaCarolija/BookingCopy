@@ -60,7 +60,7 @@ public abstract class Security {
          Timestamp timestamp = null;
          if(rs.next())
          {
-             timestamp = rs.getTimestamp("security_date");
+             timestamp = rs.getTimestamp("security_date");//aaaa
            
          }
           Timestamp CurrentTime = new Timestamp(System.currentTimeMillis());
