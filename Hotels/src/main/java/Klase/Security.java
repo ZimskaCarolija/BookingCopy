@@ -18,7 +18,7 @@ import java.util.Random;
  *
  * @author Aleksa
  */
-public  class Security {
+public abstract class Security {
     
     private static int securityTokenLength = 15;
      public static String RandomSecurityToken()
