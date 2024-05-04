@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  *
@@ -131,5 +132,37 @@ public class RoomType {
     boolean exists = rs.next(); // Check if a record exists
     con.close();
     return exists;
+    }
+    public static ArrayList<RoomType> returnFreeTypes(Connection con , String from  , String to , int hotelId) throws Exception
+    {
+        ArrayList<RoomType> roomTypes = new ArrayList<>();
+        PreparedStatement st = con.prepareStatement("SELECT t.room_type_id, t.no_beds, t.room_type_name, t.desribe,t.banovan,t.hotel_id, t.PRICE " +
+"FROM hotel h " +
+"JOIN room_type t ON h.hotel_id = t.hotel_id " +
+"JOIN room r ON t.room_type_id = r.room_type_id " +
+"LEFT JOIN reservations re ON r.room_id = re.room_id AND re.dateFrom <= ? AND re.dateTo >= ? " +
+"WHERE h.banovan = 1 " +
+"AND t.banovan = 1 " +
+"AND r.banovan = 1 " +
+"AND h.hotel_id = ? " +
+"AND re.room_id IS NULL " +
+"GROUP BY t.room_type_id, t.no_beds, t.room_type_name, t.desribe, t.PRICE;");
+        st.setString(1, to);
+        st.setString(2, from);
+        st.setInt(3, hotelId);
+        ResultSet rs = st.executeQuery();
+         while(rs.next())
+        {
+                    int no_beds = rs.getInt("no_beds");
+                    int room_type_id = rs.getInt("room_type_id");
+                    String room_type_name = rs.getString("room_type_name");
+                    int hotel_id  = rs.getInt("hotel_id");
+                    boolean banovan = rs.getBoolean("banovan");
+                    String desribe = rs.getString("desribe");
+                    int price = rs.getInt("price");
+                    RoomType room = new RoomType(room_type_id,no_beds,room_type_name,desribe,hotel_id,banovan,price);
+                    roomTypes.add(room);
+        }
+        return roomTypes;
     }
 }

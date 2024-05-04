@@ -572,8 +572,9 @@ public class HotelsApplication {
            }
            
        }
+       //To add price
        @PostMapping("/DodajRoomType")
-      public ResponseEntity<?> DodajRoomType(HttpServletRequest request, @RequestParam("name") String naziv, @RequestParam("hotel") int hotelId, @RequestParam("noBeds") int noBeds, @RequestParam("opis") String opis) 
+      public ResponseEntity<?> DodajRoomType(HttpServletRequest request, @RequestParam("name") String naziv, @RequestParam("hotel") int hotelId, @RequestParam("noBeds") int noBeds, @RequestParam("opis") String opis,@RequestParam("price") int price) 
        {
             if(!Sesije.ProveriOvlascenje(request,2))
            {
@@ -587,11 +588,12 @@ public class HotelsApplication {
                  return ResponseEntity.badRequest().body("You are not owner of hotel");
              }
             Connection con = Konekcija.VratiKonekciju();
-            PreparedStatement st = con.prepareStatement("insert into room_type(no_beds,room_type_name,desribe,hotel_id) Values(?,?,?,?)");
+            PreparedStatement st = con.prepareStatement("insert into room_type(no_beds,room_type_name,desribe,hotel_id,price) Values(?,?,?,?,?)");
             st.setInt(1, noBeds);
             st.setString(2, naziv);
             st.setString(3, opis);
             st.setInt(4, hotelId);
+            st.setInt(5, price);
             st.execute();
             con.close();
             return ResponseEntity.ok("Success");
@@ -667,10 +669,11 @@ public class HotelsApplication {
                return ResponseEntity.badRequest().body("Error : " + ex.getMessage());
            }
         }
+        //to add price
          @PostMapping("/IzmeniRoomType")
       public ResponseEntity<?> IzmeniRoomType(HttpServletRequest request, @RequestParam("name") String naziv, @RequestParam("hotel") int hotelId, 
               @RequestParam("noBeds") int noBeds, @RequestParam("opis") String opis,
-               @RequestParam("id") int id,@RequestParam("showing") boolean ban ) 
+               @RequestParam("id") int id,@RequestParam("showing") boolean ban,@RequestParam("price") int price ) 
        {
             if(!Sesije.ProveriOvlascenje(request,2))
            {
@@ -684,13 +687,14 @@ public class HotelsApplication {
                  return ResponseEntity.badRequest().body("You are not owner of hotel");
              }
             Connection con = Konekcija.VratiKonekciju();
-            PreparedStatement st = con.prepareStatement("UPDATE room_type SET no_beds = ?, room_type_name = ?, desribe = ?, hotel_id = ?, banovan = ? WHERE  room_type_id = ?;");
+            PreparedStatement st = con.prepareStatement("UPDATE room_type SET no_beds = ?, room_type_name = ?, desribe = ?, hotel_id = ?, banovan = ? , price = ? WHERE  room_type_id = ?;");
             st.setInt(1, noBeds);
             st.setString(2, naziv);
             st.setString(3, opis);
             st.setInt(4, hotelId);
             st.setBoolean(5, ban);
-            st.setInt(6, id);
+            st.setInt(6, price);
+            st.setInt(7, id);
             st.execute();
             con.close();
             return ResponseEntity.ok("Success");
@@ -1270,4 +1274,33 @@ public class HotelsApplication {
              }
          }
      }
+         @GetMapping("/HotelExtendedID")
+     public ResponseEntity<?> HotelExtendedID(@RequestParam("id")int id)
+     {
+         Connection con = null;
+         try
+         {
+             con = Konekcija.VratiKonekciju();
+             HotelExtended hotel  = HotelExtended.HoteExtendedId(con, id);
+             ObjectMapper maper = new ObjectMapper();
+             String str = maper.writeValueAsString(hotel);
+             return ResponseEntity.ok(str);
+         }
+         catch(Exception ex)
+         {
+             return ResponseEntity.badRequest().body(ex.getMessage());
+         }
+         finally
+         {
+             try
+             {
+                 con.close();
+             }
+             catch(Exception ex2)
+             {
+                 return ResponseEntity.badRequest().body(ex2.getMessage());
+             }
+         }
+     }
+
 }

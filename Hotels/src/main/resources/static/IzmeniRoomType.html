@@ -46,10 +46,11 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
              <div>Room Name <input type="text" id="name"></div>
              <div> Hotel : <select id="hotel"></select></div>
              <div>NO Beds : <input type="number" min ="1" max="5" id="noBeds"> </div>
+              <div>Price : <input type="number" min ="1"  id="price"> </div>
              <div>Description : <textarea id="opis"> </textarea></div>
              <div class="flexY">is showing : <input type="checkbox" id="ban"/></div>
              
-             <div><button onclick="Sacuvaj()">Edit</button></div>
+             <div><button class="Dugme" onclick="Sacuvaj()">Edit</button></div>
          </div>
        <footer>
            <div>Hotels</div>
@@ -66,10 +67,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 let hotel = "";
                     $.post("http://localhost:8080/RoomTypeID",{id:id},function (data){
                         data = JSON.parse(data);
+                        console.log(data);
                         document.getElementById("name").value = data.room_type_name;
                         document.getElementById("noBeds").value = data.no_beds;
                         document.getElementById("opis").value = data.desribe;
                         document.getElementById("ban").checked  = data.banovan;
+                        document.getElementById("price").value  = data.price;
                         hotel = data.hotel_id;
                     }).fail(function(xhr, status, error) {
                            alert(xhr.responseText);
@@ -103,7 +106,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 let noBeds = parseInt(document.getElementById("noBeds").value);
                 let opis = document.getElementById("opis").value;
                 let ban = document.getElementById("ban").checked;
-                $.post("http://localhost:8080/IzmeniRoomType", {name: name, hotel: hotel, noBeds: noBeds, opis: opis,id:id,showing:ban}, function(data) {
+                let price = document.getElementById("price").value;
+                $.post("http://localhost:8080/IzmeniRoomType", {name: name, hotel: hotel, noBeds: noBeds, opis: opis,id:id,showing:ban,price:price}, function(data) {
                     alert(data);
                 }).fail(function(xhr, status, error) {
                     alert("Error" + xhr.responseText);

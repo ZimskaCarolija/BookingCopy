@@ -46,10 +46,11 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
              <div>Room Name <input type="text" id="name"></div>
              <div> Hotel : <select id="hotel"></select></div>
              <div>NO Beds : <input type="number" min ="1" max="5" id="noBeds"> </div>
+             <div>Price : <input type="number" min ="1"  id="price"> </div>
              <div>Description : <textarea id="opis"> </textarea></div>
              
              
-             <button onclick="Sacuvaj()">Add</button>
+             <div><button class="Dugme" onclick="Sacuvaj()">Add</button></div>
          </div>
        <footer>
            <div>Hotels</div>
@@ -83,7 +84,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 let hotel = parseInt(document.getElementById("hotel").value);
                 let noBeds = parseInt(document.getElementById("noBeds").value);
                 let opis = document.getElementById("opis").value;
-                $.post("http://localhost:8080/DodajRoomType", {name: name, hotel: hotel, noBeds: noBeds, opis: opis}, function(data) {
+                let price = document.getElementById("price").value;
+                $.post("http://localhost:8080/DodajRoomType", {name: name, hotel: hotel, noBeds: noBeds, opis: opis,price:price}, function(data) {
                     alert(data);
                 }).fail(function(xhr, status, error) {
                     alert("Error" + xhr);
