@@ -49,3 +49,17 @@ Admin Adding Amenities and Locations:
 
 The admin logs in and adds amenities that rooms can have, such as WiFi or full board.
 The admin also adds locations, specifying cities and states where the hotels are located.
+#################@@ PROJECT PICTURES
+![image](https://github.com/ZimskaCarolija/BookingCopy/assets/138680504/63497e9e-2ba9-4f5c-87ed-6036772c04cc)
+![image](https://github.com/ZimskaCarolija/BookingCopy/assets/138680504/9a53141e-ea75-47d4-94d2-02f116696620)
+![image](https://github.com/ZimskaCarolija/BookingCopy/assets/138680504/80fc9bfb-b3bd-453a-82c8-803b5c465edb)
+![image](https://github.com/ZimskaCarolija/BookingCopy/assets/138680504/c5fccca5-b0f3-4a93-889d-1ff4eb29d1df)
+![image](https://github.com/ZimskaCarolija/BookingCopy/assets/138680504/3839396e-3ede-4ea0-a42f-f262f0d4b913)
+![image](https://github.com/ZimskaCarolija/BookingCopy/assets/138680504/778f1763-bb61-4e61-8ada-dd35a15ffd7e)
+![image](https://github.com/ZimskaCarolija/BookingCopy/assets/138680504/8af8a5db-cb2b-4982-bac9-298af533c29d)
+![image](https://github.com/ZimskaCarolija/BookingCopy/assets/138680504/b5581752-6bf7-416f-9e4e-baddcc61d4ff)
+![image](https://github.com/ZimskaCarolija/BookingCopy/assets/138680504/b7ad245f-713a-4c31-b746-af5f807fbf12)
+![image](https://github.com/ZimskaCarolija/BookingCopy/assets/138680504/4e643c9c-7b9c-497b-86c9-71d8221a89be)
+![image](https://github.com/ZimskaCarolija/BookingCopy/assets/138680504/c5321b68-d0b9-4f39-8e68-060325aa5d75)
+
+
