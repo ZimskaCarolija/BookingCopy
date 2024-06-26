@@ -16,7 +16,7 @@ public class Konekcija {
     {
           try{
         Class.forName("com.mysql.cj.jdbc.Driver"); 
-        Connection connection=DriverManager.getConnection("jdbc:mysql://localhost:3306/hotels","root","");
+        Connection connection=DriverManager.getConnection("jdbc:mysql://localhost:3306/hotel","root","");
 
 //$con->close();
 
