@@ -111,3 +111,13 @@ insert into Account_type(acc_type_name) VALUES ('Manager');
 insert into Account_type(acc_type_name) VALUES ('Admin');
 
 insert into Users(email,pass,phone,verified,acc_type_id) VALUES('aki.velimirovic',PASSWORD('aleksa'),'0643472608',true,3);
+Select * from Users where email = 'aki.velimirovic' and pass = Password('aleksa');
+Select * from Users where user_id =2;
+ALTER TABLE Hotel
+ADD userId int;
+ALTER TABLE Hotel
+ADD foreign key (userId) references Users(user_id)
+AlTER TABLE ROOM
+ADD PRICE INT
+AlTER TABLE ROOM_TYPE
+aDD PRICE INT
